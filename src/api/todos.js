@@ -11,7 +11,7 @@ export function getTodo(todoId) {
 	return axios.get(`/todos/${todoId}`).then(res = res.data)
 }
 
-// Create todo (todo is { title, description, dueDate, authorId })
+// Create todo. A todo is { title, description, dueDate, authorId }
 export async function createTodo(todo) {
 	const response = await axios.post('/todos', todo)
 	return response.data
