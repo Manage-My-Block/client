@@ -1,4 +1,4 @@
-import axios from './axios'
+import axios from '../utils/axios'
 
 // Get all users (async method)
 export async function getUsers() {
@@ -11,7 +11,7 @@ export function getUser(userId) {
 	return axios.get(`/users/${userId}`).then(res = res.data)
 }
 
-// Create user. A user is { username, password, apartment, name, role }
+// Create user. A user is { username, password, apartment, name, role(?) }
 export async function createUser(user) {
 	const response = await axios.post('/users', user)
 	return response.data
