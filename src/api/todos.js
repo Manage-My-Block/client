@@ -1,4 +1,4 @@
-import axios from './axios'
+import axios from '../utils/axios'
 
 // Get all todos (async method)
 export async function getTodos() {
@@ -11,7 +11,7 @@ export function getTodo(todoId) {
 	return axios.get(`/todos/${todoId}`).then(res = res.data)
 }
 
-// Create todo. A todo is { title, description, dueDate, authorId }
+// Create todo. A todo is { title, description, dueDate }
 export async function createTodo(todo) {
 	const response = await axios.post('/todos', todo)
 	return response.data
