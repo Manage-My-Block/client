@@ -18,22 +18,26 @@ export default function AuthForm({ authType }) {
 
         console.log('Submitting: ', data)
 
+        let responseData = {}
+
         if (authType === 'register') {
 
-
-            const responseData = await register(data)
-            console.log('register response: ', responseData)
+            responseData = await register(data)
+            console.log('Register response: ', responseData)
 
         } else if (authType === 'login') {
-            
-            const responseData = await login(data)
-            console.log('login resonse: ', responseData)
 
-            // Set user store
-            const token = responseData.token
-            const { username, name, apartment } = responseData.user
-            setUserData({ token, username, name, apartment })
+            responseData = await login(data)
+            console.log('Login response: ', responseData)
+
         }
+        
+        // Extract response data
+        const token = responseData.token
+        const { username, name, apartment } = responseData.user || responseData.newUser // response property is different for login/register
+
+        // Set user store
+        setUserData({ token, username, name, apartment })
     }
 
     return (
