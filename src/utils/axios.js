@@ -12,9 +12,9 @@ const jwt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVTJGc2RH
 // Create an axios instance with custom configuration
 export default axios.create({
 	baseURL: 'http://127.0.0.1:3001',
-	headers: {
-		common: {
-			'Authorization': `Bearer ${jwt_token}`
-		}
-	}
+	// headers: {
+	// 	common: {
+	// 		'Authorization': `Bearer ${jwt_token}`
+	// 	}
+	// }
 })
