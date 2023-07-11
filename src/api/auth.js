@@ -16,7 +16,7 @@ export async function register({ email, password, apartment, name }) {
 	// console.log('Registering')
 
 	try {
-		const response = await axios.post('/register', { username: email, password, apartment, name })
+		const response = await axios.post('/register', { email, password, apartment, name })
 		return response.data
 	} catch (error) {
 		console.log(error)
