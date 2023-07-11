@@ -19,12 +19,14 @@ export default function AuthForm({ authType }) {
 
         console.log('Submitting: ', data)
 
-        let responseData = {}
+        let responseData
 
         if (authType === 'register') {
 
+           
             responseData = await register(data)
             console.log('Register response: ', responseData)
+          
 
         } else if (authType === 'login') {
 
@@ -33,19 +35,22 @@ export default function AuthForm({ authType }) {
 
         }
         
-        // Extract response data
-        const token = responseData.token
-        const { email, name, apartment } = responseData.user || responseData.newUser // response property is different for login/register
+        // Extract response data if it got defined
+        if (responseData) {
+            const token = responseData.token
+            const { email, name, apartment } = responseData.user || responseData.newUser // response property is different for login/register
+    
+            // Set user store
+            setUserData({ token, email, name, apartment })
 
-        // Set user store
-        setUserData({ token, email, name, apartment })
+        }
     }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-2 max-w-md'>
             <div>
                 <input
-                    {...formRegister('email', { required: true })}
+                    {...formRegister('email', { required: 'Email required' })}
                     defaultValue='admin@admin.com'
                     type='email'
                     className='input input-bordered w-full'
@@ -68,17 +73,17 @@ export default function AuthForm({ authType }) {
                 <>
                     <div>
                         <input
-                            {...formRegister('apartment', { required: true })}
+                            {...formRegister('apartment', { required: "Apartment number required" })}
                             defaultValue='0'
                             type='text'
                             className='input input-bordered w-full'
-                            placeholder='Apartment #'
+                            placeholder='Apartment number'
                         />
                     </div>
 
                     <div>
                         <input
-                            {...formRegister('name', { required: true })}
+                            {...formRegister('name', { required: "Name required" })}
                             defaultValue='Admin'
                             type='text'
                             className='input input-bordered w-full'
@@ -88,7 +93,11 @@ export default function AuthForm({ authType }) {
                 </>
             )}
 
-            {errors.email && <span>This field is required</span>}
+            {errors.email && <div className='alert alert-error rounded-md'>{errors.email.message}</div>}
+            {(errors.password?.type === 'required') && (<div className='alert alert-error rounded-md'>Password required</div>)}
+            {(errors.password?.type === 'minLength') && (<div className='alert alert-error rounded-md'>Password must be at least 6 characters</div>)}
+            {errors.apartment && <div className='alert alert-error rounded-md'>{errors.apartment.message}</div>}
+            {errors.name && <div className='alert alert-error rounded-md'>{errors.name.message}</div>}
 
             <button className='btn btn-primary w-full'>{authType}</button>
         </form>
