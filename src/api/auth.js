@@ -8,7 +8,7 @@ export async function login({ email, password }) {
 		return response.data
 	} catch (error) {
 		console.log(error)
-		// console.error(error.response.data.error)
+		console.error(error.response.data.error)
 	}
 }
 
@@ -16,10 +16,10 @@ export async function register({ email, password, apartment, name }) {
 	// console.log('Registering')
 
 	try {
-		const response = await axios.post('/register', { username: email, password, apartment, name })
+		const response = await axios.post('/register', { email, password, apartment, name })
 		return response.data
 	} catch (error) {
 		console.log(error)
-		// console.error(error.response.data.error)
+		console.error(error.response.data.errors)
 	}
 } 

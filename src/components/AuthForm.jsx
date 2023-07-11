@@ -5,12 +5,13 @@ import { login, register } from '../api/auth'
 import { useAuthStore } from '../stores/AuthStore'
 
 export default function AuthForm({ authType }) {
+
     const { setUserData } = useAuthStore()
 
     const {
-        register: formRegister, // alias register function so I can use "register" and "login" as API function names
+        register: formRegister, // alias "register" hook-form function so it doesn't overwrite "register" API function
         handleSubmit,
-        watch,
+        // watch,
         formState: { errors },
     } = useForm()
 
@@ -18,22 +19,26 @@ export default function AuthForm({ authType }) {
 
         console.log('Submitting: ', data)
 
+        let responseData = {}
+
         if (authType === 'register') {
 
-
-            const responseData = await register(data)
-            console.log('register response: ', responseData)
+            responseData = await register(data)
+            console.log('Register response: ', responseData)
 
         } else if (authType === 'login') {
-            
-            const responseData = await login(data)
-            console.log('login resonse: ', responseData)
 
-            // Set user store
-            const token = responseData.token
-            const { username, name, apartment } = responseData.user
-            setUserData({ token, username, name, apartment })
+            responseData = await login(data)
+            console.log('Login response: ', responseData)
+
         }
+        
+        // Extract response data
+        const token = responseData.token
+        const { email, name, apartment } = responseData.user || responseData.newUser // response property is different for login/register
+
+        // Set user store
+        setUserData({ token, email, name, apartment })
     }
 
     return (
@@ -50,7 +55,7 @@ export default function AuthForm({ authType }) {
 
             <div>
                 <input
-                    {...formRegister('password', { required: true })}
+                    {...formRegister('password', { required: true, minLength: 6 })}
                     defaultValue='1234'
                     type='password'
                     className='input input-bordered w-full'
@@ -58,6 +63,7 @@ export default function AuthForm({ authType }) {
                 />
             </div>
 
+            {/* Add extra inputs for "apartment" and "name" if props.authType is "Register" */}
             {authType === 'register' && (
                 <>
                     <div>
