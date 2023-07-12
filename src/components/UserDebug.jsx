@@ -8,6 +8,6 @@ export default function UserDebug() {
 		<p>Email: {email}</p>
 		<p>Apartment: {apartment}</p>
 		<p>Name: {name}</p>
-		{/* <p>Token: {token}</p> */}
+		{token && <p>Token: {'......' + token.slice(-4)}</p>}
 	</div>
 }

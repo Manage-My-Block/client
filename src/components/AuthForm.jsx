@@ -41,8 +41,8 @@ export default function AuthForm({ authType }) {
             const { email, name, apartment } = responseData.user || responseData.newUser // response property is different for login/register
     
             // Set user store
+            console.log('Setting global user store')
             setUserData({ token, email, name, apartment })
-
         }
     }
 
@@ -61,7 +61,7 @@ export default function AuthForm({ authType }) {
             <div>
                 <input
                     {...formRegister('password', { required: true, minLength: 6 })}
-                    defaultValue='1234'
+                    defaultValue='123456'
                     type='password'
                     className='input input-bordered w-full'
                     placeholder='Password'

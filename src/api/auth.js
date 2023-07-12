@@ -1,10 +1,10 @@
 import api from '../utils/axios'
 
 export async function login({ email, password }) {
-	// console.log('Logging in')
+	console.log('Logging in')
 
 	try {
-		const response = await api.post('/login', { username: email, password })
+		const response = await api.post('/login', { email, password })
 		return response.data
 	
 	} catch (error) {

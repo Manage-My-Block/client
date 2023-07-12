@@ -7,33 +7,40 @@ import axios from 'axios'
 }
 */
 const jwt_token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVTJGc2RHVmtYMStRVjltY3F2ZFpQK2QxY0h0TExxVTZEaTNVVi92ZkdRSmtzTGlBNGFuY210Y2hYZFkxQ1duVSIsImlhdCI6MTY4ODk1NjkzNywiZXhwIjoxNjg5NTYxNzM3fQ.VAtQEsbZWamQ_vH7eIavmCLRNZYaBj1FKynCKHEbzjw'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVTJGc2RHVmtYMS9OazVYSGN3WGlmd3pQLytIV0xVNHlLT0E3K2R2M3NpT1doM1N5QmV4aU92RWJCSUtzRDIwVSIsImlhdCI6MTY4OTA3MjQzOSwiZXhwIjoxNjg5Njc3MjM5fQ.j4Lx2ZxY8iZ-gNByRHSzs_IalAdBByCAKzfFf-UADBc'
 
 // Create an axios instance with custom configuration
 const api = axios.create({
     baseURL: 'http://127.0.0.1:3001',
-    // headers: {
-    // 	common: {
-    // 		'Authorization': `Bearer ${jwt_token}`
-    // 	}
-    // }
+    headers: {
+    	common: {
+    		'Authorization': `Bearer ${jwt_token}`
+    	}
+    }
 })
 
 
+// Add request interceptor (used here to add the JWT from localStorage to all outgoing requests)
+api.interceptors.request.use(
+    (config) => {
+		// Extract JWT token from localStorage
+		const localStorageUser = JSON.parse(localStorage.getItem('user-storage'))
+		const token = localStorageUser.state.token
+		
+		// Add the JWT to the axios instance
+		if (token) {
+			config.headers['Authorization'] = `Bearer ${token}`;
+		  }
+        // Modify request config here if needed
+        return config
+    },
+    (error) => {
+        // Handle request error here
+        return Promise.reject(error)
+    }
+)
 
-// // Add request interceptor
-// api.interceptors.request.use(
-//     (config) => {
-//         // Modify request config here if needed
-//         return config
-//     },
-//     (error) => {
-//         // Handle request error here
-//         return Promise.reject(error)
-//     }
-// )
-
-// Add response interceptor
+// Add response interceptor (used here to add global error handling)
 api.interceptors.response.use(
     (response) => {
         // Handle successful response here
