@@ -3,10 +3,16 @@ import { useForm } from 'react-hook-form'
 import { login, register } from '../api/auth'
 
 import { useAuthStore } from '../stores/AuthStore'
+import { useUserStore } from '../stores/UserStore'
+
+import { useNavigate } from "react-router-dom"
 
 export default function AuthForm({ authType }) {
 
-    const { setUserData } = useAuthStore()
+    const { setUserData } = useUserStore()
+    const { setToken } = useAuthStore()
+
+    const navigate = useNavigate()
 
     const {
         register: formRegister, // alias "register" hook-form function so it doesn't overwrite "register" API function
@@ -23,7 +29,6 @@ export default function AuthForm({ authType }) {
 
         if (authType === 'register') {
 
-           
             responseData = await register(data)
             console.log('Register response: ', responseData)
           
@@ -37,13 +42,22 @@ export default function AuthForm({ authType }) {
         
         // Extract response data if it got defined
         if (responseData) {
+
             const token = responseData.token
-            const { email, name, apartment } = responseData.user || responseData.newUser // response property is different for login/register
+            
+            const { email, name, apartment, role: { role } } = responseData.user || responseData.newUser // response property is different for login/register
     
             // Set user store
-            console.log('Setting global user store')
-            setUserData({ token, email, name, apartment })
+            console.log('Setting user store')
+            setUserData({ email, name, apartment, role })
+
+            // Set auth store
+            console.log('Setting auth store')
+            setToken(token)
         }
+
+        // Navigate to home page (Dashboard)
+        navigate('/')
     }
 
     return (

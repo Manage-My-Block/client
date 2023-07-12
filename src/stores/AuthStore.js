@@ -4,15 +4,9 @@ import { persist } from 'zustand/middleware'
 export const useAuthStore = create(
     persist(
         (set) => ({
-            email: '',
-            apartment: '',
-            name: '',
-            role: null,
-            token: null,
-            setUserData: (userData) => set(userData),
+            token: '',
+            setToken: (token) => set((state) => ({ token: token })),
         }),
-        {
-            name: 'user-storage', // name for localStorage
-        }
+        { name: 'auth' } // name for localStorage
     )
 )

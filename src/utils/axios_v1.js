@@ -1,24 +1,22 @@
 import axios from 'axios'
 
-import { useAuthStore } from '../stores/AuthStore';
-
 /* Token from seeded admin user just for dev purposes
 {
   "username": "john@email.com",
   "password": "password123"
 }
 */
-// const jwt_token =
-//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVTJGc2RHVmtYMS9OazVYSGN3WGlmd3pQLytIV0xVNHlLT0E3K2R2M3NpT1doM1N5QmV4aU92RWJCSUtzRDIwVSIsImlhdCI6MTY4OTA3MjQzOSwiZXhwIjoxNjg5Njc3MjM5fQ.j4Lx2ZxY8iZ-gNByRHSzs_IalAdBByCAKzfFf-UADBc'
+const jwt_token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVTJGc2RHVmtYMS9OazVYSGN3WGlmd3pQLytIV0xVNHlLT0E3K2R2M3NpT1doM1N5QmV4aU92RWJCSUtzRDIwVSIsImlhdCI6MTY4OTA3MjQzOSwiZXhwIjoxNjg5Njc3MjM5fQ.j4Lx2ZxY8iZ-gNByRHSzs_IalAdBByCAKzfFf-UADBc'
 
 // Create an axios instance with custom configuration
 const api = axios.create({
     baseURL: 'http://127.0.0.1:3001',
-    // headers: {
-    // 	common: {
-    // 		'Authorization': `Bearer ${jwt_token}`
-    // 	}
-    // }
+    headers: {
+    	common: {
+    		'Authorization': `Bearer ${jwt_token}`
+    	}
+    }
 })
 
 
@@ -26,18 +24,13 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) => {
 		// Extract JWT token from localStorage
-		// const localStorageUser = JSON.parse(localStorage.getItem('user-storage'))
-		// const token = localStorageUser.state.token
+		const localStorageUser = JSON.parse(localStorage.getItem('user-storage'))
+		const token = localStorageUser.state.token
 		
 		// Add the JWT to the axios instance
-
-        const token = useAuthStore.getState().token
-        config.headers = { Authorization: `Bearer ${token}`}
-
-		// if (token) {
-		// 	config.headers['Authorization'] = `Bearer ${token}`;
-		//   }
-
+		if (token) {
+			config.headers['Authorization'] = `Bearer ${token}`;
+		  }
         // Modify request config here if needed
         return config
     },

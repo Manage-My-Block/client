@@ -1,5 +1,6 @@
 import api from '../utils/axios'
 
+
 export async function login({ email, password }) {
 	console.log('Logging in')
 
