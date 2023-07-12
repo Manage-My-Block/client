@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useAuthStore } from '../stores/AuthStore'
+import { useUserStore } from '../stores/UserStore'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Navbar({ children }) {
     // const [token] = useState(() => JSON.parse(localStorage.getItem('auth')).state.token)
@@ -8,8 +10,18 @@ export default function Navbar({ children }) {
     const { token, setToken } = useAuthStore()
     // console.log('Navbar tokent init: ', token)
 
+    const { setUserData } = useUserStore()
+
+    const navigate = useNavigate()
+
     function closeDrawer() {
         document.querySelector('#my-drawer-2').click()
+    }
+
+    function handleLogout() {
+        setToken("")
+        setUserData({})
+        navigate('/login')
     }
 
     return (
@@ -36,7 +48,7 @@ export default function Navbar({ children }) {
                     {token ? (
                         <>
                             <li>
-                                <p onClick={() => setToken("")}>Logout</p>
+                                <p onClick={handleLogout}>Logout</p>
                             </li>
                         </>
                         
