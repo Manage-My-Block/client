@@ -19,20 +19,21 @@ export default function Navbar({ children }) {
     }
 
     function handleLogout() {
-        setToken("")
-        setUserData({})
+        setToken("") // Clear JWT
+        setUserData({}) // Clear user data
         navigate('/login')
     }
 
     return (
         <div className='drawer md:drawer-open'>
             <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
+            
             {/* <div className='drawer-content flex flex-col items-center justify-center'> */}
             <div className='drawer-content'>
                 {/* Page content here */}
                 <label
                     htmlFor='my-drawer-2'
-                    className='btn btn-primary drawer-button rounded-none absolute right-0 md:hidden'
+                    className='btn btn-primary drawer-button rounded-none absolute right-0 z-10 md:hidden'
                 >
                     Open Menu
                 </label>
@@ -40,7 +41,7 @@ export default function Navbar({ children }) {
             </div>
             <div className='drawer-side'>
                 <label htmlFor='my-drawer-2' className='drawer-overlay'></label>
-                <ul className='menu p-4 w-80 h-full bg-base-200 text-base-content text-lg'>
+                <ul className='menu p-4 w-60 h-full bg-base-200 text-base-content text-lg'>
                     {/* Sidebar content here */}
 
 

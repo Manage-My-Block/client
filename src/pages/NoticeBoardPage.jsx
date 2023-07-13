@@ -14,7 +14,7 @@ export default function NoticeBoardPage() {
     if (isError) return <h1>Error: {error.message}</h1>
     
     return <div className="m-4">
-        <h1 className="text-3xl">Notice Board</h1>
+        <h1 className="text-3xl font-extrabold">Notice Board</h1>
 
         <div className="mt-8">
             <NoticeList notices={notices}/>

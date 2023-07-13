@@ -1,3 +1,5 @@
 export default function MeetingsPage() {
-    return <div>MeetingsPage</div>
+    return <div className="m-4">
+        <h1 className="text-3xl font-extrabold">Meetings</h1>
+    </div>
 }

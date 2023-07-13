@@ -19,7 +19,7 @@ export default function MembersPage() {
 
     return (
         <div className='m-4'>
-            <h1 className='text-3xl'>Members</h1>
+            <h1 className='text-3xl font-extrabold'>Members</h1>
 
             <div className='mt-8 border border-neutral rounded'>
                 <MemberList members={members} />
