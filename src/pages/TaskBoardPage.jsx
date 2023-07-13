@@ -23,8 +23,8 @@ export default function TaskBoardPage() {
     if (isLoading) return <h1>Loading...</h1>
     if (isError) return <h1>Error: {error.message}</h1>
     
-    return <div>
-        <h1>TaskBoardPage</h1>
+    return <div className="m-4">
+        <h1 className="text-3xl font-extrabold">Task Board</h1>
 
         {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
         

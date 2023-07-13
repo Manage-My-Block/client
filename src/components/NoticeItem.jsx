@@ -10,8 +10,8 @@ export default function NoticeItem({ notice }) {
             {/* Title+Auther and Date  */}
             <div className='flex justify-between'>
                 <div>
-                    <div className='text-2xl'>{notice.title}</div>
-                    <div className="">by {notice.author.name}</div>
+                    <div className='text-2xl font-bold'>{notice.title}</div>
+                    <div className="">{notice.author.name}</div>
                 </div>
 
                 <div>
