@@ -1,18 +1,31 @@
-import { useQuery } from "@tanstack/react-query"
-import { getUsers } from "../api/users"
+import { useQuery } from '@tanstack/react-query'
+import { getUsers } from '../api/users'
+
+import MemberList from '../components/MemberList'
 
 export default function MembersPage() {
-
-    const { data, isLoading, isError, error } = useQuery({
+    const {
+        data: members,
+        isLoading,
+        isError,
+        error,
+    } = useQuery({
         queryKey: ['users'],
-        queryFn: getUsers
+        queryFn: getUsers,
     })
 
     if (isLoading) return <h1>Loading...</h1>
     if (isError) return <h1>Error: {error.message}</h1>
-    
-    return <div>
-        <h1>Members page</h1>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
+
+    return (
+        <div className='m-4'>
+            <h1 className='text-3xl'>Members</h1>
+
+            <div className='mt-8 border border-neutral rounded'>
+                <MemberList members={members} />
+            </div>
+
+            {/* <pre>{JSON.stringify(members, null, 2)}</pre> */}
+        </div>
+    )
 }

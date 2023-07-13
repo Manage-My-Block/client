@@ -43,8 +43,11 @@ export default function Navbar({ children }) {
                 <ul className='menu p-4 w-80 h-full bg-base-200 text-base-content text-lg'>
                     {/* Sidebar content here */}
 
+
                     {/* <li>{'token: ' + token}</li> */}
 
+
+                    {/* If token exists, show Logout otherwise show Login/Register */}
                     {token ? (
                         <>
                             <li>
@@ -56,24 +59,13 @@ export default function Navbar({ children }) {
                     ) : (
                         <>
                         <li>
-                            <Link to='/register' onClick={closeDrawer}>Register</Link>
+                            <Link to='/login' onClick={closeDrawer}>Login</Link>
                         </li>
                         <li>
-                            <Link to='/login' onClick={closeDrawer}>Login</Link>
+                            <Link to='/register' onClick={closeDrawer}>Register</Link>
                         </li>
                     </>
                     )}
-
-                    {/* <li>
-                        <Link to='/register' onClick={closeDrawer}>
-                            Register
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to='/login' onClick={closeDrawer}>
-                            Login
-                        </Link>
-                    </li> */}
 
                     <hr className='my-4 opacity-20' /> 
 
