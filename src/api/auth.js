@@ -9,7 +9,7 @@ export async function login(data) {
 		return response.data
 
 	} catch (error) {
-		console.log(error.message)
+		return error.response.data
 	}
 }
 
@@ -19,8 +19,9 @@ export async function register(data) {
 	try {
 		const response = await api.post('/register', data)
 		return response.data
+
 	} catch (error) {
-		console.log(error.message)
+		return error.response.data
 	}
 }
 
@@ -33,7 +34,7 @@ export async function newBuilding({ data }) {
 		return response.data
 
 	} catch (error) {
-		console.log(error.message)
+		return error.response.data
 	}
 }
 
@@ -45,6 +46,6 @@ export async function confirmJWT(jwt) {
 		return response.data
 
 	} catch (error) {
-		console.log(error.message)
+		return error.response.data
 	}
 }

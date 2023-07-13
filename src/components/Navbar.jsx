@@ -1,26 +1,26 @@
 import { Link } from 'react-router-dom'
-import { useAuthStore } from '../stores/AuthStore'
-import { useUserStore } from '../stores/UserStore'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSignOut } from 'react-auth-kit'
+import { useIsAuthenticated } from 'react-auth-kit';
 
+
+// eslint-disable-next-line react/prop-types
 export default function Navbar({ children }) {
-    // const [token] = useState(() => JSON.parse(localStorage.getItem('auth')).state.token)
-
-    const { token, setToken } = useAuthStore()
-    // console.log('Navbar tokent init: ', token)
-
-    const { setUserData } = useUserStore()
-
+    // Navigation hook
     const navigate = useNavigate()
+
+    // Auth kit library signout hook
+    const signOut = useSignOut()
+
+    // Auth kit library check authentication
+    const isAuthenticated = useIsAuthenticated()
 
     function closeDrawer() {
         document.querySelector('#my-drawer-2').click()
     }
 
     function handleLogout() {
-        setToken("") // Clear JWT
-        setUserData({}) // Clear user data
+        signOut()
         navigate('/login')
     }
 
@@ -49,7 +49,7 @@ export default function Navbar({ children }) {
 
 
                     {/* If token exists, show Logout otherwise show Login/Register */}
-                    {token ? (
+                    {isAuthenticated() ? (
                         <>
                             <li>
                                 <p onClick={handleLogout}>Logout</p>
