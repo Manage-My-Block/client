@@ -5,6 +5,7 @@ import { persist } from 'zustand/middleware'
 export const useUserStore = create(
     persist(
         (set) => ({
+            _id: '',
             email: '',
             apartment: '',
             name: '',
