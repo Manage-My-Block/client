@@ -6,6 +6,7 @@ export async function getBuildings() {
 
 	try {
 		const response = await api.get('/buildings')
+
 		return response.data
 
 	} catch (error) {

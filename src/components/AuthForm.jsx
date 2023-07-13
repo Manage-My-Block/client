@@ -9,6 +9,8 @@ import { Link, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getBuildings } from '../api/buildings'
 import { useEffect, useState } from 'react'
+import { useSignIn } from 'react-auth-kit'
+
 
 // eslint-disable-next-line react/prop-types
 export default function AuthForm({ authType }) {
@@ -20,6 +22,10 @@ export default function AuthForm({ authType }) {
 
     const queryClient = useQueryClient()
 
+    // Auth kit to manage signIn to cookies
+    const signIn = useSignIn()
+
+    // I don't know how to get this working...
     // const { buildingData, isLoading, isError, error } = useQuery({
     //     queryKey: ['buildings'],
     //     queryFn: getBuildings
@@ -87,6 +93,14 @@ export default function AuthForm({ authType }) {
         if (responseData?.token) {
 
             const token = responseData.token
+
+            // Manage signIn and cookie storage
+            signIn({
+                token: token,
+                expiresIn: 1,
+                tokenType: "Bearer",
+                authState: { email: responseData.user.email, user_id: responseData.user._id }
+            })
 
             const { _id, email, name, apartment, role: { role } } = responseData.user || responseData.newUser // response property is different for login/register
 
