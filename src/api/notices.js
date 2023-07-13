@@ -4,11 +4,11 @@ import api from '../utils/axios'
 export async function getNotices() {
 	const response = await api.get('/notices')
 	return response.data
-} 
+}
 
 // Get single notice by id (non async method just to see the difference)
 export function getNotice(noticeId) {
-	return api.get(`/notices/${noticeId}`).then(res = res.data)
+	return api.get(`/notices/${noticeId}`).then(res => res.data)
 }
 
 // Create notice. A notice is { title, message, imageUrl(optional) }
@@ -30,7 +30,7 @@ export async function addCommentNotice(noticeId, comment) {
 }
 
 // Delete a comment from a notice
-export async function deleteCommentNotice() {
+export async function deleteCommentNotice(noticeId, commentId) {
 	const response = await api.delete(`/notices/${noticeId}/${commentId}`)
 	return response.data
 }

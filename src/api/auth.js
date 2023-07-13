@@ -1,11 +1,11 @@
 import api from '../utils/axios'
 
 
-export async function login({ email, password }) {
+export async function login(data) {
 	console.log('Logging in')
 
 	try {
-		const response = await api.post('/login', { email, password })
+		const response = await api.post('/login', data)
 		return response.data
 
 	} catch (error) {
@@ -13,11 +13,11 @@ export async function login({ email, password }) {
 	}
 }
 
-export async function register({ email, password, apartment, name }) {
+export async function register(data) {
 	console.log('Registering')
 
 	try {
-		const response = await api.post('/register', { email, password, apartment, name })
+		const response = await api.post('/register', data)
 		return response.data
 	} catch (error) {
 		console.log(error.message)
