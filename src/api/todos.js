@@ -4,11 +4,11 @@ import api from '../utils/axios'
 export async function getTodos() {
 	const response = await api.get('/todos')
 	return response.data
-} 
+}
 
 // Get single todo by id (non async method just to see the difference)
 export function getTodo(todoId) {
-	return api.get(`/todos/${todoId}`).then(res = res.data)
+	return api.get(`/todos/${todoId}`).then(res => res.data)
 }
 
 // Create todo. A todo is { title, description, dueDate }

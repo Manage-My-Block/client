@@ -45,7 +45,7 @@ export default function NewBuildingForm() {
             // Manage signIn and cookie storage
             signIn({
                 token: responseData.token,
-                expiresIn: 1,
+                expiresIn: 3600,
                 tokenType: "Bearer",
                 authState: { user: responseData.user }
             })
