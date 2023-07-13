@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import { getNotices } from "../api/notices"
 
+import NoticeList from "../components/NoticeList"
+
 export default function NoticeBoardPage() {
 
-    const { data, isLoading, isError, error } = useQuery({
+    const { data: notices, isLoading, isError, error } = useQuery({
         queryKey: ['notices'],
         queryFn: getNotices
     })
@@ -11,8 +13,13 @@ export default function NoticeBoardPage() {
     if (isLoading) return <h1>Loading...</h1>
     if (isError) return <h1>Error: {error.message}</h1>
     
-    return <div>
-        <h1>NoticeBoardPage</h1>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+    return <div className="m-4">
+        <h1 className="text-3xl">Notice Board</h1>
+
+        <div className="mt-8">
+            <NoticeList notices={notices}/>
+        </div>
+
+        <pre>{JSON.stringify(notices, null, 2)}</pre>
     </div>
 }
