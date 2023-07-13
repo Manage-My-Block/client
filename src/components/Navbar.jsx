@@ -55,20 +55,23 @@ export default function Navbar({ children }) {
                                 <p onClick={handleLogout}>Logout</p>
                             </li>
                         </>
-                        
+
 
                     ) : (
                         <>
-                        <li>
-                            <Link to='/login' onClick={closeDrawer}>Login</Link>
-                        </li>
-                        <li>
-                            <Link to='/register' onClick={closeDrawer}>Register</Link>
-                        </li>
-                    </>
+                            <li>
+                                <Link to='/login' onClick={closeDrawer}>Login</Link>
+                            </li>
+                            <li>
+                                <Link to='/register' onClick={closeDrawer}>Register</Link>
+                            </li>
+                            <li>
+                                <Link to='/newbuilding' onClick={closeDrawer}>New Building</Link>
+                            </li>
+                        </>
                     )}
 
-                    <hr className='my-4 opacity-20' /> 
+                    <hr className='my-4 opacity-20' />
 
                     <li>
                         <Link to='/' onClick={closeDrawer}>
