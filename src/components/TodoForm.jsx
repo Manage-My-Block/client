@@ -2,11 +2,29 @@ import { useForm } from 'react-hook-form'
 import { createTodo } from '../api/todos'
 import { useAuthUser } from 'react-auth-kit'
 import './TodoForm.css'
+import { getBudgets } from '../api/budget'
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useTaskStore } from "../stores/TaskStore"
+import { useNavigate } from 'react-router-dom'
+
+import { Button, Modal } from 'flowbite-react';
 
 
-export default function TodoForm() {
+
+// eslint-disable-next-line react/prop-types
+export default function TodoForm({ isSubmitted, setIsSubmitted }) {
+    // Access authorised user data from cookies
     const auth = useAuthUser()
     const user = auth().user
+
+    const navigate = useNavigate()
+
+    // Store new tasks in Query story
+    // const addTask = useTaskStore((state) => state.addTask)
+
+    // Manage modal popup
+    // const [isSubmitted, setIsSubmitted] = useState(false);
 
     // Form management
     const {
@@ -17,18 +35,33 @@ export default function TodoForm() {
         reset,
     } = useForm()
 
+    // Get budgets list
+    const { data } = useQuery({
+        queryKey: ['budgets'],
+        queryFn: getBudgets
+    })
+
     // Form submission
     const onSubmit = async (data) => {
         data.building = user.building._id
         data.author = user._id
 
+        console.log(data)
+
         // Login user
         const responseData = await createTodo(data)
 
-        // Check todo is in response data
-        if (responseData.todo) {
+        console.log(responseData)
 
-            //
+        // Check todo ID is in response data
+        if (responseData._id) {
+
+            // Close modal
+            setIsSubmitted(true)
+
+            setOpenModal(undefined)
+
+            reset({ errors: {} })
 
         } else if (responseData?.errors || responseData?.error) {
 
@@ -40,164 +73,158 @@ export default function TodoForm() {
 
     const handleFormChange = () => {
         // Reset errors when the form changes
-        reset({ errors: {} });
+        // reset({ errors: {} });
     };
+
+    const [openModal, setOpenModal] = useState();
 
     return (
         <>
-            <button className="btn" onClick={() => window.my_modal_2.showModal()}>Create a new task</button>
-            <dialog id="my_modal_2" className="modal">
+            <Button
+                onClick={() => setOpenModal('form-elements')}
+                className="btn bg-green-700">Create task</Button>
 
-                <form onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange} method="dialog" className="modal-box space-y-2 max-w-md">
-                    <div>
-                        <h1 className='my-4 font-bold'>Start a new task!</h1>
-                    </div>
+            <Modal
+                dismissible
+                show={openModal === 'form-elements'}
+                size="md"
+                popup
+                className='overflow-hidden bg-transparent'
+                onClose={() => {
+                    setOpenModal(undefined)
+                    reset();
+                }}>
 
-                    <div>
-                        <input
-                            {...formRegister('title', { required: 'Title required' })}
-                            defaultValue=''
-                            type='text'
-                            className='input input-bordered w-full'
-                            placeholder='Title'
-                        />
-                    </div>
+                <Modal.Header
+                    className='bg-slate-800 absolute right-0'>
+                </Modal.Header>
 
-                    <div>
-                        <input
-                            {...formRegister('description', { required: 'Description required' })}
-                            defaultValue=''
-                            type='text'
-                            className='input input-bordered w-full'
-                            placeholder='Description'
-                        />
-                    </div>
+                <Modal.Body
+                    className='bg-slate-800 text-white'>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 max-w-md">
+                        <div>
+                            <h1 className='my-4 font-bold text-lg'>Start a new task!</h1>
+                        </div>
 
-                    <div>
-                        <label className="label cursor-pointer">
-                            <span className="label-text">Requires vote</span>
-                            <input {...formRegister('needsVote')} type="checkbox" className="toggle toggle-accent" />
-                        </label>
-                    </div>
-
-                    <div>
-                        <label className="label cursor-pointer">
-                            <span className="label-text">Due date</span>
+                        <div>
                             <input
-                                {...formRegister('dueDate')}
-                                type="date" id="start" name="trip-start" />
-                        </label>
+                                {...formRegister('title', { required: 'Title required' })}
+                                defaultValue=''
+                                type='text'
+                                className='input input-bordered w-full'
+                                placeholder='Title *'
+                            />
+                        </div>
 
-                    </div>
+                        <div>
+                            <input
+                                {...formRegister('description', { required: 'Description required' })}
+                                defaultValue=''
+                                type='text'
+                                className='input input-bordered w-full'
+                                placeholder='Description *'
+                            />
+                        </div>
 
-                    {/* <div>
-                        <select
-                            {...formRegister('status')}
-                            defaultValue=''
-                            className='input input-bordered w-full'
-                        >
-                            <option value='' disabled>Select status</option>
-                            <option value='pending'>pending</option>
-                            <option value='started'>started</option>
+                        <div>
+                            <select
+                                {...formRegister('status')}
+                                defaultValue=''
+                                className='input input-bordered w-full text-slate-400'
+                                placeholder='test'
+                            >
+                                <option value='' disabled>Select status *</option>
+                                <option value='pending'>pending</option>
+                                <option value='started'>started</option>
 
-                        </select>
-                    </div> */}
+                            </select>
+                        </div>
 
-                    {/* Print useForm validation errors */}
-                    {errors.title && <div className='alert alert-error rounded-md'>{errors.title.message}</div>}
-                    {errors.description && <div className='alert alert-error rounded-md'>{errors.description.message}</div>}
+                        <div>
+                            <label className="label cursor-pointer">
+                                <span className="label-text">Due date *</span>
+                                <input
+                                    {...formRegister('dueDate', { required: 'Due date required' })}
+                                    type="date"
+                                    name="due-date"
+                                    value={new Date().toISOString().split('T')[0]} />
+                            </label>
+                        </div>
 
-                    {/* Print any server provided errors */}
-                    {errors?.backendErrors && errors.backendErrors.message.map((error, index) => {
-                        return <div key={index} className='alert alert-error rounded-md'>{error}</div>
-                    })}
+                        <div>
+                            <label className="label cursor-pointer">
+                                <span className="label-text">Requires vote</span>
+                                <input
+                                    {...formRegister('needsVote')}
+                                    type="checkbox"
+                                    className="toggle toggle-accent" />
+                            </label>
+                        </div>
 
-                    <div className='pt-2'>
-                        <button className='btn btn-primary w-full'>Create task</button>
-                    </div>
+                        <div>
+                            {data?.length > 0 ?
+                                <input
+                                    {...formRegister('cost')}
+                                    defaultValue=''
+                                    type='text'
+                                    className='input input-bordered w-full'
+                                    placeholder='Cost'
+                                />
+                                :
+                                <input
+                                    {...formRegister('cost')}
+                                    defaultValue=''
+                                    type='text'
+                                    className='input input-bordered w-full'
+                                    placeholder='Cost'
+                                    disabled
+                                />
+                            }
+                        </div>
 
-                </form>
+                        <div>
+                            <select
+                                {...formRegister('budget')}
+                                defaultValue=''
+                                className='input input-bordered w-full'>
 
-                <form method="dialog" className="modal-backdrop">
-                    <button>close</button>
-                </form>
+                                {/* Update description if no budgets */}
+                                {data?.length > 0 ?
+                                    <option value='' disabled>Select budget</option>
+                                    :
+                                    <option value='' disabled>No budgets</option>
+                                }
 
-            </dialog>
+                                {/* List budgets options */}
+                                {data && data.map(budget => {
+                                    return (<option key={budget._id} value={budget._id}>{budget.name}</option>)
+                                })}
+
+                            </select>
+                        </div>
+
+
+
+                        {/* Print useForm validation errors */}
+                        {errors.title && <div className='alert alert-error rounded-md'>{errors.title.message}</div>}
+                        {errors.description && <div className='alert alert-error rounded-md'>{errors.description.message}</div>}
+                        {errors.dueDate && <div className='alert alert-error rounded-md'>{errors.dueDate.message}</div>}
+
+                        {/* Print any server provided errors */}
+                        {errors?.backendErrors && errors.backendErrors.message.map((error, index) => {
+                            return <div key={index} className='alert alert-error rounded-md'>{error}</div>
+                        })}
+
+                        <div className='pt-2'>
+                            <button className='btn btn-primary w-full' type='submit'>Create task</button>
+                        </div>
+
+                    </form>
+
+                </Modal.Body>
+
+            </Modal>
+
         </>
     )
 }
-
-            // <form onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange} className='space-y-2 max-w-md'>
-            //     <div>
-            //         <h1 className='my-4 font-bold'>Login</h1>
-            //     </div>
-
-            //     <div>
-            //         <input
-            //             {...formRegister('title', { required: 'Email required' })}
-            //             defaultValue=''
-            //             type='text'
-            //             className='input input-bordered w-full'
-            //             placeholder='Title'
-            //         />
-            //     </div>
-
-            //     <div>
-            //         <input
-            //             {...formRegister('description', { required: true, minLength: 6 })}
-            //             defaultValue=''
-            //             type='text'
-            //             className='input input-bordered w-full'
-            //             placeholder='Description'
-            //         />
-            //     </div>
-
-            //     <div>
-            //         <select
-            //             {...formRegister('status', { required: 'Apartment number required' })}
-            //             defaultValue=''
-            //             className='input input-bordered w-full'
-            //         >
-            //             <option value='' disabled>Select status</option>
-            //             <option value='pending'>pending</option>
-            //             <option value='started'>pending</option>
-
-            //         </select>
-            //     </div>
-
-            //     <div>
-            //         <input
-            //             {...formRegister('completed', { required: 'Apartment number required' })}
-            //             type="checkbox"
-            //             className="toggle"
-            //             checked />
-            //     </div>
-
-            //     <div>
-            //         <input
-            //             {...formRegister('completed', { required: 'Apartment number required' })}
-            //             type="checkbox"
-            //             className="toggle"
-            //             checked />
-            //     </div>
-
-
-            //     {/* Print useForm validation errors */}
-            //     {errors.email && <div className='alert alert-error rounded-md'>{errors.email.message}</div>}
-            //     {errors.password?.type === 'required' && <div className='alert alert-error rounded-md'>Password required</div>}
-            //     {errors.password?.type === 'minLength' && <div className='alert alert-error rounded-md'>Password must be at least 6 characters</div>}
-
-            //     {/* Print any server provided errors */}
-            //     {errors?.backendErrors && errors.backendErrors.message.map((error, index) => {
-            //         return <div key={index} className='alert alert-error rounded-md'>{error}</div>
-            //     })}
-
-            //     <div className='pt-2'>
-            //         <button className='btn btn-primary w-full'>LOGIN</button>
-            //     </div>
-
-            //     <p>{"Don't have an account? "}<Link className="underline" to="/register">Register</Link></p>
-
-            //     <p>{"Or manage a new building "}<Link className="underline" to="/newbuilding">here</Link></p>
-
-            // </form> 
