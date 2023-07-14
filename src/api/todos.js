@@ -23,6 +23,24 @@ export async function updateTodo(todoId, todo) {
 	return response.data
 }
 
+// Cast vote
+export async function voteOnTodo(data) {
+	const response = await api.put(`/todos/${data.todoId}/vote`, data.vote)
+	return response.data
+}
+
+// Call vote
+export async function callVoteTodo(data) {
+	const response = await api.put(`/todos/${data}/callvote`)
+	return response.data
+}
+
+// Write comment
+export async function commentTodo(data) {
+	const response = await api.put(`/todos/${data.todoId}/comment`, data.comment)
+	return response.data
+}
+
 // Delete todo
 export async function deleteTodo(todoId) {
 	const response = await api.delete(`/todos/${todoId}`)
