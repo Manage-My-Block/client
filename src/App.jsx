@@ -37,13 +37,6 @@ export default function App() {
                         <Route path='/noticeboard' element={<PrivateRoute Component={NoticeBoardPage} />} />
                         <Route path='/meetings' element={<PrivateRoute Component={MeetingsPage} />} />
                         <Route path='/members' element={<PrivateRoute Component={MembersPage} />} />
-
-                        {/* Protected Paths */}
-                        {/* <Route path='/' element={<RequireAuth loginPath={'/register'}><HomePage /></RequireAuth>} />
-                        <Route path='/taskboard' element={<RequireAuth loginPath={'/register'}><TaskBoardPage /></RequireAuth>} />
-                        <Route path='/noticeboard' element={<RequireAuth loginPath={'/register'}><NoticeBoardPage /></RequireAuth>} />
-                        <Route path='/meetings' element={<RequireAuth loginPath={'/register'}><MeetingsPage /></RequireAuth>} />
-                        <Route path='/members' element={<RequireAuth loginPath={'/register'}><MembersPage /></RequireAuth>} /> */}
                     </Routes>
 
                     <UserDebug />

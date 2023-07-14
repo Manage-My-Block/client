@@ -28,7 +28,6 @@ export default function Navbar({ children }) {
         <div className='drawer md:drawer-open'>
             <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
 
-            {/* <div className='drawer-content flex flex-col items-center justify-center'> */}
             <div className='drawer-content'>
                 {/* Page content here */}
                 <label
@@ -44,32 +43,32 @@ export default function Navbar({ children }) {
                 <ul className='menu p-4 w-60 h-full bg-base-200 text-base-content text-lg'>
                     {/* Sidebar content here */}
 
-
-                    {/* <li>{'token: ' + token}</li> */}
-
-
                     {/* If token exists, show Logout otherwise show Login/Register */}
-                    {isAuthenticated() ? (
-                        <>
-                            <li>
-                                <p onClick={handleLogout}>Logout</p>
-                            </li>
-                        </>
+                    {isAuthenticated() ?
+                        (
+                            <>
+                                <li>
+                                    <p onClick={handleLogout}>Logout</p>
+                                </li>
+                            </>
 
 
-                    ) : (
-                        <>
-                            <li>
-                                <Link to='/login' onClick={closeDrawer}>Login</Link>
-                            </li>
-                            <li>
-                                <Link to='/register' onClick={closeDrawer}>Register</Link>
-                            </li>
-                            <li>
-                                <Link to='/newbuilding' onClick={closeDrawer}>New Building</Link>
-                            </li>
-                        </>
-                    )}
+                        )
+                        :
+                        (
+                            <>
+                                <li>
+                                    <Link to='/login' onClick={closeDrawer}>Login</Link>
+                                </li>
+                                <li>
+                                    <Link to='/register' onClick={closeDrawer}>Register</Link>
+                                </li>
+                                <li>
+                                    <Link to='/newbuilding' onClick={closeDrawer}>New Building</Link>
+                                </li>
+                            </>
+                        )
+                    }
 
                     <hr className='my-4 opacity-20' />
 
