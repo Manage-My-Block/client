@@ -23,7 +23,7 @@ export default function HomePage() {
             </div>
             <div className='bg-gray-600 grid grid-cols-2 grid-rows-2 p-4 gap-4'>
                 <div>
-                    <DashboardList title={"Notices"} data={noticesQuery.data} propertiesToDisplay={['title', 'created at']}/>
+                    <DashboardList title={"Notices"} data={noticesQuery.data} propertiesToDisplay={['title', 'createdAt']}/>
                 </div>
                 <div className=''>
                     <DashboardList title={"Meetings"} data={meetingsQuery.data} propertiesToDisplay={['title', 'meetingDate']}/>
