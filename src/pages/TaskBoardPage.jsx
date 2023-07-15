@@ -17,7 +17,7 @@ export default function TaskBoardPage() {
     const handleDelete = useMutation({
         mutationFn: deleteTodo,
         onSuccess: () => {
-            console.log('on success')
+            // console.log('on success')
             queryClient.invalidateQueries({ queryKey: ['todos'] })
         }
     })
