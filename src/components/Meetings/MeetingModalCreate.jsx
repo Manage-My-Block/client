@@ -19,7 +19,11 @@ export default function MeetingModalCreate() {
             queryClient.invalidateQueries(['meetings'])
         },
         onError: (error) => {
-            console.log(error)
+            // Manage errors
+            if (error?.errors || error?.error) {
+                setError("backendErrors", { type: "manual", message: error.errors || Array(error.error) })
+            }
+
         }
     })
 
