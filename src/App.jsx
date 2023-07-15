@@ -39,7 +39,7 @@ export default function App() {
                         <Route path='/members' element={<PrivateRoute Component={MembersPage} />} />
                     </Routes>
 
-                    <UserDebug />
+                    {/* <UserDebug /> */}
                 </main>
             </Navbar>
         </div>
