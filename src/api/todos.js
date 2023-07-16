@@ -18,8 +18,8 @@ export async function createTodo(todo) {
 }
 
 // Update todo
-export async function updateTodo(todoId, todo) {
-	const response = await api.put(`/todos/${todoId}`, todo)
+export async function updateTodo(data) {
+	const response = await api.put(`/todos/${data.todoId}`, data.updatedData)
 	return response.data
 }
 

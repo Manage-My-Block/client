@@ -4,10 +4,7 @@ import { useAuthUser } from 'react-auth-kit'
 import './TodoForm.css'
 import { getBudgets } from '../api/budget'
 import { useState } from 'react'
-import { useTaskStore } from "../stores/TaskStore"
-import { useNavigate } from 'react-router-dom'
-
-import { Modal, Button } from 'flowbite-react';
+import { Modal } from 'flowbite-react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
 
@@ -37,7 +34,7 @@ export default function TodoForm() {
     const handleCreate = useMutation({
         mutationFn: createTodo,
         onSuccess: () => {
-            console.log('on success')
+            console.log('create Task')
 
             // Close modal
             setOpenModal(undefined)
@@ -48,13 +45,17 @@ export default function TodoForm() {
             queryClient.invalidateQueries({ queryKey: ['todos'] })
         },
         onError: (error) => {
-            console.log('on error')
             console.log(error)
 
-            if (error?.errors || error?.error) {
+            if (error.response.data?.errors || error.response.data?.error) {
 
-                // Manage errors
-                setError("backendErrors", { type: "manual", message: error.errors || Array(error.error) })
+                // Extract errors
+                if (error.response.data.error) {
+                    setError("backendErrors", { type: "manual", message: Array(error.response.data.error) })
+                } else if (error.response.data.errors) {
+                    setError("backendErrors", { type: "manual", message: error.response.data.errors })
+
+                }
             }
 
             queryClient.invalidateQueries({ queryKey: ['todos'] })
@@ -64,13 +65,19 @@ export default function TodoForm() {
     // Form submission
     const onSubmit = async (data) => {
         // Add user and building IDs to data
-        data.building = user.building._id
-        data.author = user._id
 
-        // Create new Todo
-        // const responseData = await createTodo(data)
+        const cleanedData = {
+            building: user.building._id,
+            author: user._id
+        }
 
-        handleCreate.mutate(data)
+        Object.keys(data).forEach(key => {
+            if (data[key]) {
+                cleanedData[key] = data[key]
+            }
+        })
+
+        handleCreate.mutate(cleanedData)
 
         // // Check todo ID is in response data
         // if (responseData._id) {
@@ -109,7 +116,10 @@ export default function TodoForm() {
                 onClose={() => setOpenModal(undefined)}>
 
                 <Modal.Header
-                    className='bg-gray-800 absolute right-0'>
+                    className='bg-gray-800 absolute right-0'
+                    onClick={() => reset()}
+                >
+
                 </Modal.Header>
 
                 <Modal.Body
@@ -127,6 +137,7 @@ export default function TodoForm() {
                                 className='input input-bordered w-full'
                                 placeholder='Title *'
                             />
+                            {errors.title && <div className='mt-2 p-3 alert alert-error rounded-md'>{errors.title.message}</div>}
                         </div>
 
                         <div>
@@ -137,47 +148,61 @@ export default function TodoForm() {
                                 className='input input-bordered w-full'
                                 placeholder='Description *'
                             />
+                            {errors.description && <div className='mt-2 p-3 alert alert-error rounded-md'>{errors.description.message}</div>}
                         </div>
 
                         <div>
                             <select
-                                {...formRegister('status', { required: 'Status is required' })}
+                                {...formRegister('status')}
                                 defaultValue=''
-                                className='input input-bordered w-full text-slate-400'
-                                placeholder='test'
+                                className='input input-bordered w-full text-slate-400 cursor-pointer'
+                                placeholder=''
                             >
-                                <option value='' disabled>Select status *</option>
+                                <option value='' disabled>Select status</option>
                                 <option value='pending'>pending</option>
-                                <option value='started'>started</option>
+                                <option value='active'>active</option>
 
                             </select>
                         </div>
 
                         <div className='flex gap-2 justify-between'>
                             <div>
-                                <span className="label label-text">Due date *</span>
+                                <span className="label label-text">Due date</span>
                                 <input
-                                    {...formRegister('dueDate', { required: 'Due date required' })}
+                                    {...formRegister('dueDate', {
+                                        validate: value => {
+                                            if (!value) {
+                                                return true
+                                            }
+                                            // Check if date is in the past
+                                            const selectedDate = new Date(value);
+                                            const today = new Date();
+                                            return selectedDate >= today || 'Due date must be a future date';
+                                        }
+                                    })}
                                     type="date"
                                     className="bg-base-100"
                                 />
                             </div>
-
-                            <div className='flex flex-grow items-center justify-center'>
-                                <label className="relative inline-flex items-center cursor-pointer">
-                                    <input
-                                        {...formRegister('needsVote')}
-                                        type="checkbox"
-                                        value=""
-                                        className="sr-only peer"
-                                    />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-600"></div>
-                                    <span className="ml-3 text-sm font-medium label-text">Needs vote</span>
-                                </label>
-                            </div>
                         </div>
 
+                        <div className='flex flex-grow items-center py-2'>
+
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input
+                                    {...formRegister('needsVote')}
+                                    type="checkbox"
+                                    className="sr-only peer"
+                                />
+                                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                                <span className="ml-3 text-sm font-medium label-text">Needs vote</span>
+                            </label>
+                        </div>
+
+                        {errors.dueDate && <div className='alert alert-error rounded-md'>{errors.dueDate.message}</div>}
+
                         <div>
+                            {/* If no budgets found, disable cost input */}
                             {data?.length > 0 ?
                                 <input
                                     {...formRegister('cost')}
@@ -202,14 +227,11 @@ export default function TodoForm() {
                             <select
                                 {...formRegister('budget')}
                                 defaultValue=''
-                                className='input input-bordered w-full'>
+                                className='input input-bordered w-full cursor-pointer text-slate-400'>
 
                                 {/* Update description if no budgets */}
-                                {data?.length > 0 ?
-                                    <option value='' disabled>Select budget</option>
-                                    :
-                                    <option value='' disabled>No budgets</option>
-                                }
+                                <option value='' disabled>{data?.length > 0 ? "Select budget" : "No budgets"}</option>
+
 
                                 {/* List budgets options */}
                                 {data && data.map(budget => {
@@ -218,11 +240,6 @@ export default function TodoForm() {
 
                             </select>
                         </div>
-
-                        {/* Print useForm validation errors */}
-                        {errors.title && <div className='alert alert-error rounded-md'>{errors.title.message}</div>}
-                        {errors.description && <div className='alert alert-error rounded-md'>{errors.description.message}</div>}
-                        {errors.dueDate && <div className='alert alert-error rounded-md'>{errors.dueDate.message}</div>}
 
                         {/* Print any server provided errors */}
                         {errors?.backendErrors && errors.backendErrors.message.map((error, index) => {

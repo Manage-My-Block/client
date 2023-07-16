@@ -21,6 +21,8 @@
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-auth-kit": "^2.12.3",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-collapsible": "^2.10.0",
     "react-date-picker": "^10.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.1",

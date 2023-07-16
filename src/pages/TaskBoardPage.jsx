@@ -1,10 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { getTodos, deleteTodo, createTodo } from "../api/todos"
-
-import TodoList from "../components/TodoList"
+import { getTodos, deleteTodo } from "../api/todos"
 import TodoForm from "../components/TodoForm"
-import { useTaskStore } from "../stores/TaskStore"
-import { useState } from "react"
+import TodoDragAndDrop from "../components/TodoDragAndDrop"
 
 export default function TaskBoardPage() {
     const queryClient = useQueryClient()
@@ -28,10 +25,11 @@ export default function TaskBoardPage() {
     return (
         <div className="m-4">
             <h1 className="text-3xl font-extrabold">Task Board</h1>
+            <div className="p-4">
+                <TodoForm />
+            </div>
 
-            <TodoForm />
-
-            <TodoList todos={data} handleDelete={handleDelete} />
+            <TodoDragAndDrop todos={data} handleDelete={handleDelete} />
         </div>
     )
 }
