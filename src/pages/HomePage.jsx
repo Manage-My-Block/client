@@ -13,7 +13,7 @@ export default function HomePage() {
     const meetingsQuery = useQuery(['meetings'], getMeetings)
     const usersQuery = useQuery(['users'], getUsers)
 
-    console.log(usersQuery.data)
+    if (usersQuery.isLoading || todosQuery.isLoading || noticesQuery.isLoading || meetingsQuery.isLoading) return <div className='w-full h-screen flex justify-center'><span className="loading loading-dots loading-lg m-auto"></span></div>
 
     return (
         <div className='h-screen grid grid-rows-[30vh_70vh]'>
@@ -23,16 +23,16 @@ export default function HomePage() {
             </div>
             <div className='bg-gray-600 grid grid-cols-2 grid-rows-2 p-4 gap-4'>
                 <div>
-                    <DashboardList title={"Notices"} data={noticesQuery.data} propertiesToDisplay={['title', 'createdAt']}/>
+                    <DashboardList title={"Notices"} data={noticesQuery.data} propertiesToDisplay={['title', 'createdAt']} />
                 </div>
                 <div className=''>
-                    <DashboardList title={"Meetings"} data={meetingsQuery.data} propertiesToDisplay={['title', 'meetingDate']}/>
+                    <DashboardList title={"Meetings"} data={meetingsQuery.data} propertiesToDisplay={['title', 'meetingDate']} />
                 </div>
                 <div>
-                    <DashboardList title={"Tasks"} data={todosQuery.data} propertiesToDisplay={['title', 'status']}/>
+                    <DashboardList title={"Tasks"} data={todosQuery.data} propertiesToDisplay={['title', 'status']} />
                 </div>
                 <div>
-                    <DashboardList title={"Members"} data={usersQuery.data} propertiesToDisplay={['name', 'email']}/>
+                    <DashboardList title={"Members"} data={usersQuery.data} propertiesToDisplay={['name', 'email']} />
                 </div>
             </div>
         </div>
