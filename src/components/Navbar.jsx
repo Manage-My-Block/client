@@ -55,37 +55,6 @@ export default function Navbar({ children }) {
                 <label htmlFor='my-drawer-2' className='drawer-overlay'></label>
                 <ul className='menu p-4 w-60 h-full bg-base-200 text-base-content text-lg'>
                     {/* Sidebar content here */}
-
-                    {/* If token exists, show Logout otherwise show Login/Register */}
-                    {isAuthenticated() ? (
-                        <>
-                            <li>
-                                <p onClick={handleLogout}>Logout</p>
-                            </li>
-                        </>
-                    ) : (
-                        <>
-                            <li>
-                                <Link to='/login' onClick={closeDrawer}>
-                                    <HiOutlineLogin size={24} />
-                                    <span>Login</span>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to='/register' onClick={closeDrawer}>
-                                    Register
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to='/newbuilding' onClick={closeDrawer}>
-                                    New Building
-                                </Link>
-                            </li>
-                        </>
-                    )}
-
-                    <hr className='my-3 border-base-content/30' />
-
                     <li>
                         <Link
                             to='/'
@@ -136,8 +105,41 @@ export default function Navbar({ children }) {
                             <span>Members</span>
                         </Link>
                     </li>
+
                     <hr className='my-3 border-base-content/30' />
+                      
                     <li>
+                        <Link to='/building' onClick={closeDrawer}>
+                            Building
+                        </Link>
+                    </li>
+
+                    {/* If token exists, show Logout otherwise show Login/Register */}
+                    {isAuthenticated() ?
+                        (
+                            <>
+                                <li>
+                                    <p onClick={handleLogout}>Logout</p>
+                                </li>
+                            </>
+
+
+                        )
+                        :
+                        (
+                            <>
+                                <li>
+                                    <Link to='/login' onClick={closeDrawer}>Login</Link>
+                                </li>
+                                <li>
+                                    <Link to='/register' onClick={closeDrawer}>Register</Link>
+                                </li>
+                                <li>
+                                    <Link to='/newbuilding' onClick={closeDrawer}>New Building</Link>
+                                </li>
+                            </>
+                        )
+                    }
                         <Link
                             to='/profile'
                             onClick={closeDrawer}
