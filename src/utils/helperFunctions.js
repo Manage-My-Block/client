@@ -1,5 +1,5 @@
 import jwt_decode from 'jwt-decode';
-import { formatDistanceToNow, format } from 'date-fns'
+import { formatDistanceToNow, format, formatRelative, parseISO } from 'date-fns'
 
 export function convertDateString(dateString) {
 	const dateObj = new Date(dateString)
@@ -33,4 +33,14 @@ export function convertToNaturalLanguage(dateString) {
 export function convertDateInput(dateString) {
 	const cleanedDateString = format(new Date(dateString), 'yyyy-MM-dd')
 	return cleanedDateString;
+}
+
+// Converts a date string to 'yyyy-MM-dd'
+export function cleanDateString(dateString) {
+	// console.log(dateString)
+	// return dateString
+	// console.log(parseISO(dateString))
+	const cleanedDateString = formatRelative(parseISO(dateString), new Date())
+	return cleanedDateString;
+
 }
