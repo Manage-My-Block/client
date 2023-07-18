@@ -10,10 +10,13 @@ import {
     HiClipboardDocumentCheck,
     HiMiniCog8Tooth,
     HiChatBubbleLeftRight,
-    HiMegaphone
+    HiMegaphone,
+    HiMiniBuildingOffice,
+    HiUserPlus,
+    HiBuildingOffice2
 } from 'react-icons/hi2'
 
-import {HiOutlineLogin, HiOutlineLogout} from 'react-icons/hi'
+import { HiOutlineLogin, HiOutlineLogout } from 'react-icons/hi'
 
 const iconSize = 22
 
@@ -91,7 +94,7 @@ export default function Navbar({ children }) {
                             onClick={closeDrawer}
                             className='font-normal space-x-1'
                         >
-                            <HiMegaphone size={iconSize}/>
+                            <HiMegaphone size={iconSize} />
                             <span>Notice Board</span>
                         </Link>
                     </li>
@@ -105,41 +108,21 @@ export default function Navbar({ children }) {
                             <span>Members</span>
                         </Link>
                     </li>
-
-                    <hr className='my-3 border-base-content/30' />
-                      
                     <li>
-                        <Link to='/building' onClick={closeDrawer}>
-                            Building
+                        <Link
+                            to='/building'
+                            onClick={closeDrawer}
+                            className='font-normal space-x-1'
+                        >
+                            <HiMiniBuildingOffice size={iconSize} />
+                            <span>Building</span>
                         </Link>
+
                     </li>
 
-                    {/* If token exists, show Logout otherwise show Login/Register */}
-                    {isAuthenticated() ?
-                        (
-                            <>
-                                <li>
-                                    <p onClick={handleLogout}>Logout</p>
-                                </li>
-                            </>
+                    <hr className='my-3 border-base-content/30' />
 
-
-                        )
-                        :
-                        (
-                            <>
-                                <li>
-                                    <Link to='/login' onClick={closeDrawer}>Login</Link>
-                                </li>
-                                <li>
-                                    <Link to='/register' onClick={closeDrawer}>Register</Link>
-                                </li>
-                                <li>
-                                    <Link to='/newbuilding' onClick={closeDrawer}>New Building</Link>
-                                </li>
-                            </>
-                        )
-                    }
+                    <li>
                         <Link
                             to='/profile'
                             onClick={closeDrawer}
@@ -168,13 +151,50 @@ export default function Navbar({ children }) {
                                         onClick={handleLogout}
                                         className='font-normal space-x-1'
                                     >
-                                        <HiOutlineLogout size={iconSize}/>
+                                        <HiOutlineLogout size={iconSize} />
                                         <span>Logout</span>
                                     </p>
                                 </li>
                             </>
                         )}
                     </div>
+
+                    {/* If token exists, show Logout otherwise show Login/Register */}
+                    {!isAuthenticated() &&
+                        <>
+                            <li>
+                                <Link
+                                    to='/login'
+                                    onClick={closeDrawer}
+                                    className='font-normal space-x-1'
+                                >
+                                    <HiOutlineLogin size={iconSize} />
+                                    <span>Login</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to='/register'
+                                    onClick={closeDrawer}
+                                    className='font-normal space-x-1'
+                                >
+                                    <HiUserPlus size={iconSize} />
+                                    <span>Register</span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to='/newbuilding'
+                                    onClick={closeDrawer}
+                                    className='font-normal space-x-1'
+                                >
+                                    <HiBuildingOffice2 size={iconSize} />
+                                    <span>New Building</span>
+                                </Link>
+                            </li>
+                        </>
+
+                    }
                 </ul>
             </div>
         </div>
