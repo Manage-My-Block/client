@@ -20,6 +20,6 @@ export default function NoticeBoardPage() {
             <NoticeList notices={notices}/>
         </div>
 
-        <pre>{JSON.stringify(notices, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(notices, null, 2)}</pre> */}
     </div>
 }

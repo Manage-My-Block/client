@@ -7,12 +7,14 @@ import RegisterForm from '../components/RegisterForm'
 export default function AuthPage({ authType }) {
 
     return (
-        <div className='w-full h-screen flex justify-center'>
-            <div className='m-auto'>
+        <div className='h-screen grid place-items-center'>
+
+            <div className='w-full md:max-w-md text-center'>
                 {authType === 'login' && <LoginForm />}
                 {authType === 'register' && <RegisterForm />}
                 {authType === 'create building' && <NewBuildingForm />}
             </div>
+
         </div>
     )
 }
