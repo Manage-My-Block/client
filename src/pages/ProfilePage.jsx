@@ -4,7 +4,7 @@ import { useAuthUser } from 'react-auth-kit'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-export default function AccountPage() {
+export default function ProfilePage() {
     const queryClient = useQueryClient()
     const auth = useAuthUser()
     const userId = auth()?.user._id
@@ -94,7 +94,7 @@ export default function AccountPage() {
     return (
         <div className='w-full h-screen flex justify-center'>
             <div className='w-fit m-auto'>
-                <h1 className='my-4 font-bold text-2xl'>Update account</h1>
+                <h1 className='my-4 font-bold text-2xl'>Update Profile</h1>
                 <form onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange}>
                     <div>
                         {/* Email field */}

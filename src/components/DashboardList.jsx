@@ -8,13 +8,13 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
     // const camelCasedProperties = propertiesToDisplay.map(propertyName => camelCase(propertyName))
 
     return (
-        <div className=" border border-base-100 rounded p-4">
+        <div className="rounded p-4 bg-neutral">
 
-            <h2 className='text-xl font-bold bg-base-300 p-2 px-4 rounded'>{title}</h2>
+            <h2 className='text-xl font-bold text-neutral-content p-2 px-4 rounded'>{title}</h2>
 
             <table className='table table-zebra table-md'>
 
-                <thead className='text-lg'>
+                <thead className='text-lg text-neutral-content'>
                     <tr>
                         {propertiesToDisplay?.map((property, index) => (
                             <th key={index}>{startCase(property)}</th>
@@ -28,7 +28,7 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
                         if (index > 1) {
                             return
                         } else {
-                            return <tr key={dataItem._id} className='border-b-0'>
+                            return <tr key={dataItem._id} className='border-b-0 odd:text-neutral-content'>
                                 {propertiesToDisplay?.map((property, index) => {
                                     if (index > 2) {
                                         return
