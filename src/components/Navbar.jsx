@@ -70,7 +70,7 @@ export default function Navbar({ children }) {
                         )
                     }
 
-                    <hr className='my-4 opacity-20' />
+                    <hr className='my-3 border-base-content/30' />
 
                     <li>
                         <Link to='/' onClick={closeDrawer}>
@@ -97,11 +97,21 @@ export default function Navbar({ children }) {
                             Members
                         </Link>
                     </li>
+                    <hr className='my-3 border-base-content/30' />
                     <li>
                         <Link to='/account' onClick={closeDrawer}>
                             Account
                         </Link>
                     </li>
+                    <li>
+                        <Link to='/settings' onClick={closeDrawer}>
+                            Settings
+                        </Link>
+                    </li>
+
+                    <div className='h-24 bg-base-300 rounded-lg mt-auto'>
+                        
+                    </div>
                 </ul>
             </div>
         </div>
