@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getMeetings } from '../api/meetings'
 import MeetingModalCreate from '../components/Meetings/MeetingModalCreate'
 import { useState } from 'react'
+import LoadingIcon from '../components/LoadingIcon'
 
 export default function MeetingsPage() {
     const meetingsQuery = useQuery({
@@ -13,8 +14,8 @@ export default function MeetingsPage() {
         placeholderData: [],
     })
 
-    if (meetingsQuery.isLoading) return <h1>Loading...</h1>
-    if (meetingsQuery.isError) return <h1>Error: {error.message}</h1>
+    if (meetingsQuery.isLoading) return <LoadingIcon />
+    if (meetingsQuery.isError) return <h1>Error: {meetingsQuery.error.message}</h1>
 
     return (
         <div className='m-4'>
@@ -23,7 +24,7 @@ export default function MeetingsPage() {
 
                 <button
                     // Open modal
-                    onClick={()=>window.meeting_modal_create.showModal()}
+                    onClick={() => window.meeting_modal_create.showModal()}
                     className='btn btn-primary normal-case'
                 >
                     Create Meeting

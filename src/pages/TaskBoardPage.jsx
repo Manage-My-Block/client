@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { getTodos, deleteTodo } from "../api/todos"
 import TodoForm from "../components/TodoForm"
 import TodoDragAndDrop from "../components/TodoDragAndDrop"
+import LoadingIcon from "../components/LoadingIcon"
 
 export default function TaskBoardPage() {
     const queryClient = useQueryClient()
@@ -19,8 +20,9 @@ export default function TaskBoardPage() {
         }
     })
 
-    if (isLoading) return <h1>Loading...</h1>
-    if (isError) return <h1>Error: {error.message}</h1>
+    if (isLoading) return <LoadingIcon />
+
+    if (isError) return <div className='w-full h-screen flex justify-center'><h1>Error: {error.message}</h1></div>
 
     return (
         <div className="m-4">

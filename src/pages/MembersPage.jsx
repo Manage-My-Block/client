@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getUsers } from '../api/users'
 
 import MemberList from '../components/MemberList'
+import LoadingIcon from '../components/LoadingIcon'
 
 export default function MembersPage() {
     const {
@@ -14,7 +15,7 @@ export default function MembersPage() {
         queryFn: getUsers,
     })
 
-    if (isLoading) return <h1>Loading...</h1>
+    if (isLoading) return <LoadingIcon />
     if (isError) return <h1>Error: {error.message}</h1>
 
     return (
