@@ -194,12 +194,14 @@ export default function TodoItem({ todo, handleDelete, getItemStyle, index, hand
                             <div className="flex gap-4 items-center p-4 bg-base-100 rounded-2xl">
                                 {/* Task description */}
                                 {!editing &&
-                                    <div className="flex w-full">
-                                        <div className="">
-                                            <h1 className="font-bold text-lg mb-1">Task description</h1>
-                                            <p className="pl-4">{todo.description}</p>
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex w-full">
+                                            <div className="">
+                                                <h1 className="font-bold text-lg mb-1">Task description</h1>
+                                                <p className="pl-4">{todo.description}</p>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-grow gap-4 justify-end">
+                                        <div className="flex gap-4">
                                             {/* Edit button */}
                                             {!todo.needsVote &&
                                                 <button
@@ -308,7 +310,7 @@ export default function TodoItem({ todo, handleDelete, getItemStyle, index, hand
                                             return (
                                                 <div key={comment._id} className="chat chat-start">
                                                     <div className="chat-header pb-1">
-                                                        {comment.user.email + " "}
+                                                        {comment.user.name + " " || comment.user.email + " "}
                                                         <time className="text-xs opacity-50">{convertToNaturalLanguage(comment.createdAt)}</time>
                                                     </div>
                                                     <div className="chat-bubble">{comment.comment}</div>

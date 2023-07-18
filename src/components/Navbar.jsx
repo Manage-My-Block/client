@@ -97,6 +97,11 @@ export default function Navbar({ children }) {
                             Members
                         </Link>
                     </li>
+                    <li>
+                        <Link to='/account' onClick={closeDrawer}>
+                            Account
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </div>

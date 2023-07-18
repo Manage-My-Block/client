@@ -4,11 +4,12 @@ import api from '../utils/axios'
 export async function getUsers() {
 	const response = await api.get('/users')
 	return response.data
-} 
+}
 
 // Get single user by id (non async method just to see the difference)
-export function getUser(userId) {
-	return api.get(`/users/${userId}`).then(res = res.data)
+export async function getUser(userId) {
+	const response = await api.get(`/users/${userId}`)
+	return response.data
 }
 
 // Create user. A user is { username, password, apartment, name, role(?) }
@@ -18,8 +19,8 @@ export async function createUser(user) {
 }
 
 // Update user
-export async function updateUser(userId, user) {
-	const response = await api.put(`/users/${userId}`, user)
+export async function updateUser(data) {
+	const response = await api.put(`/users/${data.userId}`, data.user)
 	return response.data
 }
 
