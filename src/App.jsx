@@ -13,6 +13,8 @@ import UserDebug from './components/UserDebug'
 
 // Libraries
 import { useIsAuthenticated } from 'react-auth-kit'
+import SettingsPage from './pages/SettingsPage'
+import { useEffect } from 'react'
 
 export default function App() {
 
@@ -21,6 +23,14 @@ export default function App() {
         const auth = isAuthenticated();
         return auth ? <Component /> : <Navigate to="/register" />;
     };
+
+    useEffect(() => {
+        // Get theme from localStorage
+        const theme = window.localStorage.getItem('theme')
+
+        // Set root html element data-theme attribute
+        window.document.documentElement.setAttribute('data-theme', theme)
+    }, [])
 
     return (
         <div>
@@ -39,6 +49,7 @@ export default function App() {
                         <Route path='/meetings' element={<PrivateRoute Component={MeetingsPage} />} />
                         <Route path='/members' element={<PrivateRoute Component={MembersPage} />} />
                         <Route path='/account' element={<PrivateRoute Component={AccountPage} />} />
+                        <Route path='/settings' element={<SettingsPage />}/>
                     </Routes>
 
                     {/* <UserDebug /> */}
