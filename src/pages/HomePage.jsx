@@ -51,7 +51,7 @@ export default function HomePage() {
                     })}
                 </div>
             </div>
-            <div className='bg-gray-600 grid grid-cols-2 grid-rows-2 p-4 gap-4'>
+            <div className='grid grid-cols-2 grid-rows-2 p-4 gap-4'>
                 <div>
                     <DashboardList title={"Notices"} data={noticesQuery.data} propertiesToDisplay={['title', 'createdAt']} />
                 </div>
