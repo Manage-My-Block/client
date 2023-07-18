@@ -3,8 +3,9 @@ import { getUser, updateUser } from '../api/users'
 import { useAuthUser } from 'react-auth-kit'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import LoadingIcon from '../components/LoadingIcon'
 
-export default function AccountPage() {
+export default function ProfilePage() {
     const queryClient = useQueryClient()
     const auth = useAuthUser()
     const userId = auth()?.user._id
@@ -88,7 +89,7 @@ export default function AccountPage() {
         setQueryErrors()
     };
 
-    if (userQuery.isLoading) return <div className='w-full h-screen flex justify-center'><span className="loading loading-dots loading-lg m-auto"></span></div>
+    if (userQuery.isLoading) return <LoadingIcon />
     if (userQuery.isError) return <div className='w-full h-screen flex justify-center'><h1>Error: {userQuery.error.message}</h1></div>
 
     return (

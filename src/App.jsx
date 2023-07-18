@@ -8,7 +8,8 @@ import MeetingsPage from './pages/MeetingsPage'
 import MembersPage from './pages/MembersPage'
 import TaskBoardPage from './pages/TaskBoardPage'
 import AuthPage from './pages/AuthPage'
-import AccountPage from './pages/AccountPage'
+import ProfilePage from './pages/ProfilePage'
+import BuildingPage from './pages/BuildingPage'
 import UserDebug from './components/UserDebug'
 
 // Libraries
@@ -38,7 +39,8 @@ export default function App() {
                         <Route path='/noticeboard' element={<PrivateRoute Component={NoticeBoardPage} />} />
                         <Route path='/meetings' element={<PrivateRoute Component={MeetingsPage} />} />
                         <Route path='/members' element={<PrivateRoute Component={MembersPage} />} />
-                        <Route path='/account' element={<PrivateRoute Component={AccountPage} />} />
+                        <Route path='/building' element={<PrivateRoute Component={BuildingPage} />} />
+                        <Route path='/profile' element={<PrivateRoute Component={ProfilePage} />} />
                     </Routes>
 
                     {/* <UserDebug /> */}
