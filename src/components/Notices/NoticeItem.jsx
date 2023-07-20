@@ -1,6 +1,6 @@
-import CommentList from "./CommentList"
+import CommentList from "../CommentList"
 
-import { convertDateString } from "../utils/helperFunctions"
+import { convertDateString } from "../../utils/helperFunctions"
 
 export default function NoticeItem({ notice }) {
     
@@ -20,8 +20,11 @@ export default function NoticeItem({ notice }) {
                 </div>
             </div>
 
-            <div className="mt-4">{notice.description}</div>
+            <div className="mt-4">{notice.message}</div>
 
+            {notice.image && (<div>
+                <img src={notice.image} alt="" className="w-64"/>
+            </div>)}
 
 			<div className="indicator mt-4 w-[99%]">
 				<span className="indicator-item badge badge-secondary">{notice.comments.length}</span>
