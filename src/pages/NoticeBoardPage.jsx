@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { getNotices } from "../api/notices"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { getNotices, deleteNotice } from "../api/notices"
 
 import NoticeList from "../components/Notices/NoticeList"
 import LoadingIcon from "../components/LoadingIcon"
@@ -8,10 +8,18 @@ import ModalDaisy from "../components/ModalDaisy"
 import CreateNoticeForm from "../components/Notices/CreateNoticeForm"
 
 export default function NoticeBoardPage() {
+    const queryClient = useQueryClient()
 
     const { data: notices, isLoading, isError, error } = useQuery({
         queryKey: ['notices'],
         queryFn: getNotices
+    })
+
+    const handleDelete = useMutation({
+        mutationFn: deleteNotice,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['notices'])
+        }
     })
 
     if (isLoading) return <LoadingIcon />
@@ -35,7 +43,7 @@ export default function NoticeBoardPage() {
         </ModalDaisy>
 
         <div className="mt-8">
-            <NoticeList notices={notices} />
+            <NoticeList notices={notices} handleDelete={handleDelete} />
         </div>
 
         {/* <pre>{JSON.stringify(notices, null, 2)}</pre> */}
