@@ -2,7 +2,7 @@ import CommentList from "../CommentList"
 
 import { convertDateString } from "../../utils/helperFunctions"
 
-export default function NoticeItem({ notice }) {
+export default function NoticeItem({ notice, handleDelete }) {
     
 
     return (
@@ -39,6 +39,13 @@ export default function NoticeItem({ notice }) {
 					</div>
 				</div>
 			</div>
+
+            {/* Delete button */}
+            <button
+                className='btn btn-outline btn-error btn-sm self-center'
+                onClick={() => handleDelete.mutate(notice._id)}>
+                Delete
+            </button>
         </div>
     )
 }

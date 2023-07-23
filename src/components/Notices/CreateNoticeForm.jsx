@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createNotice } from '../../api/notices'
 import { useState } from 'react'
 import { useAuthUser } from 'react-auth-kit'
+import LoadingIcon from '../LoadingIcon'
 
 export default function CreateNoticeForm() {
     // Access authorised user data from cookies
@@ -11,7 +12,8 @@ export default function CreateNoticeForm() {
 
     const [isLoading, setIsLoading] = useState(false)
 
-    const [selectedImage, setSelectedImage] = useState('') // actual blob image data
+
+    const [selectedImage, setSelectedImage] = useState(null) // File object
 
     const {
         register,
@@ -41,6 +43,8 @@ export default function CreateNoticeForm() {
         })
     }
 
+    
+
     const createNoticeMutation = useMutation({
         mutationFn: createNotice,
         onSuccess: () => {
@@ -57,6 +61,8 @@ export default function CreateNoticeForm() {
             }
         },
     })
+
+    // if (createNoticeMutation.isLoading) return <LoadingIcon />
 
     async function mySubmit(data) {
         // Use FormData API to create multipart form data
@@ -78,7 +84,7 @@ export default function CreateNoticeForm() {
 
         // console.log(selectedImage)
 
-        let b64_image
+        let b64_image = ''
 
         try {
             b64_image = await fileToBase64(selectedImage)
@@ -86,7 +92,7 @@ export default function CreateNoticeForm() {
             console.log('error converting image')
         }
 
-        // Add image as base64 string
+        // Add image as base64 string + add building and author ids
         data = {
             ...data, // form data
             image: `data:image/jpeg;base64,${b64_image}`,
@@ -100,20 +106,21 @@ export default function CreateNoticeForm() {
         // Reset form inputs
         reset()
 
-        // Close modal
+        // Close modal (create_notice_modal is the same as the string passed to the modalID prop on <DaisyModal />)
         window.create_notice_modal.close()
     }
 
     const handleImageSelect = (event) => {
         // Extract File object
-        const images = event.target.files // FileList
-        const image = images[0] // File
+        const images = event.target.files // returns a FileList object
+        const image = images[0] // returns a File object
 
         // const imageUrl = URL.createObjectURL(image)
 
         // console.log(image)
         // console.log(imageUrl)
 
+        // Set state
         setSelectedImage(image)
     }
 
