@@ -47,5 +47,7 @@ export default function NoticeBoardPage() {
         </div>
 
         {/* <pre>{JSON.stringify(notices, null, 2)}</pre> */}
+
+        
     </div>
 }
