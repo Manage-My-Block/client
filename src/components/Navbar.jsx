@@ -13,10 +13,11 @@ import {
     HiMegaphone,
     HiMiniBuildingOffice,
     HiUserPlus,
-    HiBuildingOffice2
+    HiBuildingOffice2,
 } from 'react-icons/hi2'
 
 import { HiOutlineLogin, HiOutlineLogout } from 'react-icons/hi'
+import { useState } from 'react'
 
 const iconSize = 22
 
@@ -31,8 +32,11 @@ export default function Navbar({ children }) {
     // Auth kit library check authentication
     const isAuthenticated = useIsAuthenticated()
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+
     function closeDrawer() {
         document.querySelector('#my-drawer-2').click()
+        setIsMenuOpen(false)
     }
 
     function handleLogout() {
@@ -44,20 +48,50 @@ export default function Navbar({ children }) {
         <div className='drawer md:drawer-open'>
             <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
 
+            <label
+                className={`btn btn-square btn-lg swap ${isMenuOpen ? 'swap-active' : ''} swap-rotate absolute m-4 right-0 z-10 md:hidden`}
+                htmlFor='my-drawer-2'
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+                <svg
+                    className='swap-off fill-current'
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='32'
+                    height='32'
+                    viewBox='0 0 512 512'
+                >
+                    <path d='M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z' />
+                </svg>
+
+                <svg
+                    className='swap-on fill-current'
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='32'
+                    height='32'
+                    viewBox='0 0 512 512'
+                >
+                    <polygon points='400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49' />
+                </svg>
+            </label>
+
             <div className='drawer-content'>
                 {/* Page content here */}
-                <label
+
+                {/* <label
                     htmlFor='my-drawer-2'
-                    className='btn btn-primary drawer-button rounded-none absolute right-0 z-10 md:hidden'
+                    className='swap btn btn-primary drawer-button rounded-none absolute right-0 z-20 md:hidden'
                 >
-                    Open Menu
-                </label>
+                    <input type="checkbox" />
+                    <span className='swap-on'>Open</span>
+                    <span className='swap-off'>Close</span>
+                </label> */}
+
                 {children}
             </div>
             <div className='drawer-side'>
                 <label htmlFor='my-drawer-2' className='drawer-overlay'></label>
                 <ul className='menu p-4 w-60 h-full bg-base-200 text-base-content text-lg'>
-                {/* <ul className='menu p-4 w-60 h-full text-lg'> */}
+                    {/* <ul className='menu p-4 w-60 h-full text-lg'> */}
                     {/* Sidebar content here */}
                     <li>
                         <Link
@@ -118,7 +152,6 @@ export default function Navbar({ children }) {
                             <HiMiniBuildingOffice size={iconSize} />
                             <span>Building</span>
                         </Link>
-
                     </li>
 
                     <hr className='my-3 border-base-content/30' />
@@ -161,7 +194,7 @@ export default function Navbar({ children }) {
                     </div>
 
                     {/* If token exists, show Logout otherwise show Login/Register */}
-                    {!isAuthenticated() &&
+                    {!isAuthenticated() && (
                         <>
                             <li>
                                 <Link
@@ -194,8 +227,7 @@ export default function Navbar({ children }) {
                                 </Link>
                             </li>
                         </>
-
-                    }
+                    )}
                 </ul>
             </div>
         </div>
