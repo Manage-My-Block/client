@@ -92,9 +92,10 @@ export default function CreateNoticeForm() {
             console.log('error converting image')
         }
 
+        // Data to be sent to server
         // Add image as base64 string + add building and author ids
         data = {
-            ...data, // form data
+            ...data, // form data from react-hook-form
             image: `data:image/jpeg;base64,${b64_image}`,
             building: user.building._id,
             author: user._id,

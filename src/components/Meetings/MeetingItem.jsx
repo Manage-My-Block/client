@@ -7,7 +7,7 @@ export default function MeetingItem({ meeting }) {
         <div className='border border-neutral rounded grid grid-cols-3'>
             <div className='py-2 px-3 col-span-2'>
                 <div className='text-xl font-bold'>{meeting.title}</div>
-                <div className='text-xs'>{meeting.description}</div>
+                <div className='text-sm'>{meeting.description}</div>
             </div>
             <div className='py-2 px-3 bg-base-200'>
                 <div>
