@@ -2,7 +2,7 @@ import api from '../utils/axios'
 
 
 export async function getContacts() {
-	// console.log('Getting contacts')
+	console.log('Getting contacts')
 
 	try {
 		const response = await api.get('/contacts')

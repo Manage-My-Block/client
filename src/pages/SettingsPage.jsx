@@ -57,7 +57,7 @@ export default function SettingsPage() {
         <div className='m-4'>
             <h1 className='text-3xl font-extrabold'>Settings</h1>
 			{/* Combo of Daisy dropdown and theme-change */}
-            <div data-choose-theme className='dropdown rounded mt-8'>
+            <div data-choose-theme className='dropdown dropdown-open rounded mt-8'>
                 <label tabIndex={0} className='btn m-1 text-lg normal-case'>
                     Select Theme
                 </label>
