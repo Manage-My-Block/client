@@ -34,12 +34,15 @@ export default function HomePage() {
     if (usersQuery.isLoading || todosQuery.isLoading || noticesQuery.isLoading || meetingsQuery.isLoading) return <LoadingIcon />
 
     return (
-        <div className='min-h-screen grid md:grid-rows-[30vh_70vh]'>
-            <div className='grid grid-cols-[2fr_3fr]'>
+        <div className='min-h-screen grid md:grid-rows-[2fr_3fr]'>
+
+            <div className='grid grid-cols-[1fr_1fr]'>
+
                 <div className='bg-gray-800'>
                     {/* <pre>{JSON.stringify(buildingQuery.data, null, 2)}</pre> */}
                     {buildingQuery.data?.imageUrl && <img src={buildingQuery.data.imageUrl} alt="building image" className='h-full object-contain'/>}
                 </div>
+
                 <div className='bg-gray-700'>
                     <h1>Building Conctacts</h1>
                     {contactsQuery && contactsQuery?.data.map((contact, index) => {
@@ -68,6 +71,7 @@ export default function HomePage() {
                     })}
                 </div>
             </div>
+
             <div className='grid md:grid-cols-2 grid-rows-2 p-4 gap-4'>
                 <div>
                     <DashboardList title={"Notices"} data={noticesQuery.data} propertiesToDisplay={['title', 'createdAt']} />
@@ -82,6 +86,7 @@ export default function HomePage() {
                     <DashboardList title={"Members"} data={usersQuery.data} propertiesToDisplay={['name', 'email']} />
                 </div>
             </div>
+
         </div>
     )
 }

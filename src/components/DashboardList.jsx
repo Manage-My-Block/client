@@ -8,19 +8,21 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
     // const camelCasedProperties = propertiesToDisplay.map(propertyName => camelCase(propertyName))
 
     return (
-        <div className="rounded p-4 bg-neutral">
+        <div className="border rounded-md overflow-hidden">
 
-            <h2 className='text-xl font-bold text-neutral-content p-2 px-4 rounded'>{title}</h2>
+            <h2 className='py-2 px-4 text-xl font-bold bg-neutral text-neutral-content'>
+                {title}
+            </h2>
 
-            <table className='table table-zebra table-md'>
+            <table className='table table-lg'>
 
-                <thead className='text-lg text-neutral-content'>
+                {/* <thead className='text-lg'>
                     <tr>
                         {propertiesToDisplay?.map((property, index) => (
                             <th key={index}>{startCase(property)}</th>
                         ))}
                     </tr>
-                </thead>
+                </thead> */}
 
                 <tbody className="h-10 overflow-hidden">
                     {data?.map((dataItem, index) => {
@@ -28,9 +30,9 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
                         if (index > 1) {
                             return
                         } else {
-                            return <tr key={dataItem._id} className='border-b-0 odd:text-neutral-content'>
+                            return <tr key={dataItem._id} className='border-b-0 even:bg-base-200'>
                                 {propertiesToDisplay?.map((property, index) => {
-                                    if (index > 2) {
+                                    if (index > 3) {
                                         return
                                     } else if (property === 'meetingDate' || property === 'createdAt') {
                                         return <td key={index}>{cleanDateString(dataItem[property])}</td>
