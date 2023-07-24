@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getUsers } from '../api/users'
 
-import MemberList from '../components/MemberList'
+import MemberList from '../components/Members/MemberList'
 import LoadingIcon from '../components/LoadingIcon'
 
 export default function MembersPage() {
