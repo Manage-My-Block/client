@@ -36,7 +36,7 @@ export default function HomePage() {
     return (
         <div className='min-h-screen grid md:grid-rows-[30vh_70vh]'>
 
-            <div className='grid grid-cols-2'>
+            <div className='grid md:grid-cols-2'>
 
                 <div className='bg-gray-800 overflow-hidden'>
                     {buildingQuery.data?.imageUrl && <img src={buildingQuery.data.imageUrl} alt="building image" className='w-full h-full object-cover'/>}
