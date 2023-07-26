@@ -3,6 +3,7 @@ import api from '../utils/axios'
 
 export async function getBuildings() {
 	console.log('Getting buildings')
+	console.log(api.getUri() + '/buildings')
 
 	try {
 		const response = await api.get('/buildings')
