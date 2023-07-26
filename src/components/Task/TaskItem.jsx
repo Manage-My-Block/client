@@ -246,7 +246,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
                                 {/* Editing task description */}
                                 {editing &&
-                                    <div>
+                                    <div className="w-full">
                                         <h1 className="pl-4 pt-2 text-xl font-bold">Edit task</h1>
                                         <form onSubmit={handleSubmit(onSubmit)}>
                                             <div className="flex-col gap-2 p-4">
@@ -273,7 +273,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                         defaultValue={todo.description}
                                                         rows="10"
                                                         required
-                                                        className='textarea textarea-bordered h-24'
+                                                        className='textarea textarea-bordered text-base h-24 w-full'
                                                         placeholder='Description'
                                                     />
                                                 </div>
@@ -294,9 +294,26 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                                 return selectedDate >= today || 'Due date must be a future date';
                                                             }
                                                         })}
+                                                        min={convertDateInput(new Date())}
+                                                        type="date"
+                                                        className="bg-base-200 px-4 py-3 rounded-md text-label border-none cursor-pointer"
+                                                    />
+
+                                                    {/* <input
+                                                        {...formRegister('dueDate', {
+                                                            validate: value => {
+                                                                if (!value) {
+                                                                    return true
+                                                                }
+                                                                // Check if date is in the past
+                                                                const selectedDate = new Date(value);
+                                                                const today = new Date();
+                                                                return selectedDate >= today || 'Due date must be a future date';
+                                                            }
+                                                        })}
                                                         type="date"
                                                         className="bg-base-100"
-                                                    />
+                                                    /> */}
                                                 </div>
                                             </div>
 
