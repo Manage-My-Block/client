@@ -44,7 +44,7 @@ export default function App() {
     return (
         <div>
             <Navbar>
-                <main className='min-h-screen relative'>
+                <main className=''>
                     <Routes>
                         {/* Login Paths */}
                         <Route
