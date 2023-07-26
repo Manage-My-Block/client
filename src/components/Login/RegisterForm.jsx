@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form'
-import { register } from '../api/auth'
+import { register } from '../../api/auth'
 import { Link, useNavigate } from "react-router-dom"
 import { useQuery } from '@tanstack/react-query'
-import { getBuildings } from '../api/buildings'
+import { getBuildings } from '../../api/buildings'
 import { useSignIn } from 'react-auth-kit'
 
 // eslint-disable-next-line react/prop-types

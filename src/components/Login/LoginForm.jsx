@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { login } from '../api/auth'
+import { login } from '../../api/auth'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSignIn } from 'react-auth-kit'
 
