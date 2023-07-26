@@ -64,7 +64,7 @@ export default function ProfilePage() {
 
 
         // If apartment is unchanged
-        if (data.apartment.toString() === userQuery.data.apartment.toString()) {
+        if (userQuery.data.apartment && data.apartment.toString() === userQuery.data?.apartment.toString()) {
             delete data.apartment
         }
 
