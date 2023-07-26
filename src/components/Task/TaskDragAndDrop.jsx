@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { updateTodo } from "../api/todos"
-import TodoItem from './TodoItem';
+import { useQueryClient } from "@tanstack/react-query"
+import TaskItem from './TaskItem';
 
 
 // a little function to help us with reordering the result
@@ -47,17 +46,17 @@ const getListStyle = (snapshot) => ({
     borderRadius: "10px",
     margin: "20px",
     background: '#2a323c',
-    minHeight: '134px'
+    minHeight: '134px',
 });
 
-export default function TodoDragAndDrop({ todos, handleDelete }) {
-    const [pendingItems, setPendingItems] = useState(todos.filter(todo => todo.status === 'pending'));
-    const [activeItems, setActiveItems] = useState(todos.filter(todo => todo.status === 'active'));
+export default function TaskDragAndDrop({ todos, handleDelete, handleUpdateTodo }) {
+    const [pendingItems, setPendingItems] = useState(todos.filter(todo => todo.status === 'pending' && todo.isComplete === false));
+    const [activeItems, setActiveItems] = useState(todos.filter(todo => todo.status === 'active' && todo.isComplete === false));
     const queryClient = useQueryClient()
 
     useEffect(() => {
-        setPendingItems(todos.filter(todo => todo.status === 'pending'))
-        setActiveItems(todos.filter(todo => todo.status === 'active'))
+        setPendingItems(todos.filter(todo => todo.status === 'pending' && todo.isComplete === false))
+        setActiveItems(todos.filter(todo => todo.status === 'active' && todo.isComplete === false))
     }, [todos])
 
     const id2List = {
@@ -68,20 +67,6 @@ export default function TodoDragAndDrop({ todos, handleDelete }) {
     const getList = (id) => {
         return id2List[id] === 'items' ? pendingItems : activeItems;
     };
-
-    // React query comment mutation
-    const handleUpdateTodo = useMutation({
-        mutationFn: updateTodo,
-        onSuccess: () => {
-
-            queryClient.invalidateQueries({ queryKey: ['todos'] })
-        },
-        onError: (error) => {
-            console.log(error)
-
-            queryClient.invalidateQueries({ queryKey: ['todos'] })
-        },
-    })
 
     // Trigger when dragging is finished (eg: mouse up)
     const onDragEnd = (result) => {
@@ -130,10 +115,10 @@ export default function TodoDragAndDrop({ todos, handleDelete }) {
     return (
         <DragDropContext
             onDragEnd={onDragEnd}>
-            <div className='md:flex-col lg:flex'>
+            <div className='flex justify-center flex-wrap w-full'>
                 {/* Active tasks droppable */}
-                <div>
-                    <h1 className='font-bold text-xl mb-2'>Active Tasks</h1>
+                <div className='w-full max-w-lg'>
+                    <h1 className='font-bold text-3xl mb-0 m-5'>Active Tasks</h1>
                     <Droppable droppableId="active">
                         {(provided, snapshot) => (
                             <div
@@ -142,7 +127,7 @@ export default function TodoDragAndDrop({ todos, handleDelete }) {
                                 style={getListStyle(snapshot)}>
 
                                 {activeItems.map((item, index) => (
-                                    <TodoItem key={item._id} draggableId={item._id} index={index} todo={item} handleDelete={handleDelete} getItemStyle={getItemStyle} handleUpdateTodo={handleUpdateTodo} />
+                                    <TaskItem key={item._id} draggableId={item._id} index={index} todo={item} handleDelete={handleDelete} getItemStyle={getItemStyle} handleUpdateTodo={handleUpdateTodo} />
                                 ))}
                                 {provided.placeholder}
                             </div>
@@ -151,8 +136,8 @@ export default function TodoDragAndDrop({ todos, handleDelete }) {
                 </div>
 
                 {/* Pending tasks droppable */}
-                <div>
-                    <h1 className='font-bold text-xl mb-2'>Pending Tasks</h1>
+                <div className='w-full max-w-lg'>
+                    <h1 className='font-bold text-3xl mb-0 m-5'>Pending Tasks</h1>
                     <Droppable droppableId="pending">
                         {(provided, snapshot) => (
                             <div
@@ -160,7 +145,7 @@ export default function TodoDragAndDrop({ todos, handleDelete }) {
                                 style={getListStyle(snapshot.isDraggingOver)}>
 
                                 {pendingItems.map((item, index) => (
-                                    <TodoItem key={item._id} draggableId={item._id} index={index} todo={item} handleDelete={handleDelete} getItemStyle={getItemStyle} handleUpdateTodo={handleUpdateTodo} />
+                                    <TaskItem key={item._id} draggableId={item._id} index={index} todo={item} handleDelete={handleDelete} getItemStyle={getItemStyle} handleUpdateTodo={handleUpdateTodo} />
                                 ))}
                                 {provided.placeholder}
                             </div>

@@ -1,17 +1,15 @@
 /* eslint-disable react/prop-types */
-import { voteOnTodo, commentTodo, callVoteTodo, updateTodo } from "../api/todos";
-import { convertDateString, convertToNaturalLanguage, convertDateInput } from "../utils/helperFunctions"
+import { voteOnTodo, commentTodo, callVoteTodo, updateTodo } from "../../api/todos";
+import { convertToNaturalLanguage, convertDateInput, shortenText } from "../../utils/helperFunctions"
 import { useAuthUser } from 'react-auth-kit';
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from 'react-hook-form'
-import { useEffect, useState } from "react";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { useState } from "react";
+import { Draggable } from 'react-beautiful-dnd';
 import Collapsible from 'react-collapsible';
 
-
-
 // eslint-disable-next-line react/prop-types
-export default function TodoItem({ todo, handleDelete, getItemStyle, index, handleUpdateTodo }) {
+export default function TaskItem({ todo, handleDelete, getItemStyle, index, handleUpdateTodo }) {
     const authUser = useAuthUser()
     const user_ID = authUser()?.user?._id
 
@@ -144,7 +142,7 @@ export default function TodoItem({ todo, handleDelete, getItemStyle, index, hand
     }
 
     const cardHeader = (
-        <div className={open ? "text-lg-4 flex bg-base-200 p-4 rounded-t-2xl transition-all ease-in-out duration-[50ms]" : "text-lg-4 flex bg-base-200 p-4 rounded-2xl transition-all ease-in-out delay-[210ms] duration-75"}>
+        <div className={open ? "max-w-md flex bg-base-200 p-4 rounded-t-2xl transition-all ease-in-out duration-[50ms]" : "max-w-md flex bg-base-200 p-4 rounded-2xl transition-all ease-in-out delay-[210ms] duration-75"}>
             {/* Chevron animation */}
             <div className="self-center px-4">
                 <div className={`transition-all ease-in-out duration-200 ${open ? 'rotate-180' : ''}`}>
@@ -155,28 +153,10 @@ export default function TodoItem({ todo, handleDelete, getItemStyle, index, hand
             </div>
 
             {/* Task header info */}
-            <div className={open ? "flex-grow text-lg-4 columns-4 bg-base-200 p-4 rounded-t-2xl transition-all ease-in-out duration-[50ms]" : "flex-grow text-lg-4 columns-4 bg-base-200 p-4 rounded-2xl transition-all ease-in-out delay-[210ms] duration-75"}>
-                <div>
-                    <h1 className="font-bold text-lg">Task</h1>
-                    <p>{todo.title}</p>
-                </div>
-
-                <div>
-                    <h1 className="font-bold text-lg">Status</h1>
-                    <p className={todo.status === 'pending' ? "text-amber-500" : "text-green-400"}>{todo.status}</p>
-                </div>
-
-                <div>
-                    <h1 className="font-bold text-lg">Started</h1>
-                    <p>{convertDateString(todo.createdAt)}</p>
-                </div>
-
-                <div>
-                    <h1 className="font-bold text-lg">Due</h1>
-                    <p>{todo.dueDate ? convertDateString(todo.dueDate) : "No date"}</p>
-                </div>
+            <div className="flex justify-between items-center w-full">
+                <p className="text-xl">{shortenText(todo.title)}</p>
+                <div className={todo.status === 'pending' ? "w-4 h-4 rounded-full bg-amber-500" : "w-4 h-4 rounded-full bg-green-500"}></div>
             </div>
-
         </div>
     )
 
@@ -202,20 +182,36 @@ export default function TodoItem({ todo, handleDelete, getItemStyle, index, hand
                         onOpening={() => setOpen(true)}
                         onClosing={() => setOpen(false)}
                     >
-                        <div className="flex flex-col gap-2 p-4 bg-base-200 rounded-b-2xl">
+                        <div className="max-w-md flex flex-col gap-2 px-4 pb-4 bg-base-200 rounded-b-2xl">
                             {/* Task description and edit section*/}
                             <div className="flex gap-4 items-center p-4 bg-base-100 rounded-2xl">
                                 {/* Task description */}
                                 {!editing &&
-                                    <div className="flex flex-col gap-4">
-                                        <div className="flex w-full">
+                                    <div className="flex flex-col gap-4 w-full">
+                                        <div className="flex">
                                             <div className="">
                                                 <h1 className="font-bold text-lg mb-1">Task description</h1>
                                                 <p className="pl-4">{todo.description}</p>
                                             </div>
                                         </div>
-                                        <div className="flex gap-4">
-                                            {/* Edit button */}
+
+                                        {/* <div>
+                                            <h1 className="font-bold text-lg">Status</h1>
+                                            <p className={todo.status === 'pending' ? "text-amber-500 pl-4" : "text-green-400 pl-4"}>{todo.status}</p>
+                                        </div> */}
+
+                                        <div>
+                                            <h1 className="font-bold text-lg">Due</h1>
+                                            <p className="pl-4">{todo.dueDate ? convertToNaturalLanguage(todo.dueDate) : "No date"}</p>
+                                        </div>
+
+                                        <div>
+                                            <h1 className="font-bold text-lg">Created</h1>
+                                            <p className="pl-4">{convertToNaturalLanguage(todo.createdAt)}</p>
+                                        </div>
+
+                                        <div className="flex min-w-max justify-center gap-3">
+                                            {/* Call vote button */}
                                             {!todo.needsVote &&
                                                 <button
                                                     className='btn btn-outline btn-neutral btn-sm self-center'
@@ -229,6 +225,13 @@ export default function TodoItem({ todo, handleDelete, getItemStyle, index, hand
                                                 className='btn btn-outline btn-neutral btn-sm self-center'
                                                 onClick={() => setEditing(!editing)}>
                                                 Edit
+                                            </button>
+
+                                            {/* Complete button */}
+                                            <button
+                                                className='btn btn-outline btn-accent btn-sm self-center'
+                                                onClick={() => handleUpdateTodo.mutate({ todoId: todo._id, updatedData: { isComplete: !todo.isComplete } })}>
+                                                Complete
                                             </button>
 
                                             {/* Delete button */}

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createNotice } from '../../api/notices'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthUser } from 'react-auth-kit'
 import LoadingIcon from '../LoadingIcon'
 
@@ -25,6 +25,14 @@ export default function CreateNoticeForm() {
 
     const queryClient = useQueryClient()
 
+    // Clears form input when modal is closed when clicking backdrop
+    useEffect(() => {
+        document.querySelector(".modal-backdrop").addEventListener('click', (event) => {
+            reset()
+        })
+    }, [])
+
+
     // Utility function to convert File object to base64 string
     function fileToBase64(file) {
         return new Promise((resolve, reject) => {
@@ -43,7 +51,7 @@ export default function CreateNoticeForm() {
         })
     }
 
-    
+
 
     const createNoticeMutation = useMutation({
         mutationFn: createNotice,

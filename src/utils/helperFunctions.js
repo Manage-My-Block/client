@@ -37,10 +37,11 @@ export function convertDateInput(dateString) {
 
 // Converts a date string to 'yyyy-MM-dd'
 export function cleanDateString(dateString) {
-	// console.log(dateString)
-	// return dateString
-	// console.log(parseISO(dateString))
 	const cleanedDateString = formatRelative(parseISO(dateString), new Date())
 	return cleanedDateString;
+}
+
+export function shortenText(string, maxLength = 15) {
+	return string.length > maxLength ? string.slice(0, maxLength) + "..." : string
 
 }
