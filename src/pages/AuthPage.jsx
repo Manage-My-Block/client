@@ -1,7 +1,6 @@
-
-import LoginForm from '../components/LoginForm'
-import NewBuildingForm from '../components/NewBuildingForm';
-import RegisterForm from '../components/RegisterForm'
+import LoginForm from '../components/Login/LoginForm'
+import NewBuildingForm from '../components/Login/NewBuildingForm';
+import RegisterForm from '../components/Login/RegisterForm'
 
 // eslint-disable-next-line react/prop-types
 export default function AuthPage({ authType }) {
