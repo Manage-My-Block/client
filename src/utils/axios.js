@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 // Create an axios instance with custom configuration
 const api = axios.create({
-    baseURL: 'http://localhost:3001',
+    baseURL: import.meta.env.VITE_ENV === 'dev' ? 'http://localhost:3001' : import.meta.env.VITE_PROD_SERVER,
 })
 
 // Add request interceptor (used here to add the JWT from localStorage to all outgoing requests)
