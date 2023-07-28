@@ -57,7 +57,8 @@ export default function CreateNoticeForm() {
         mutationFn: createNotice,
         onSuccess: () => {
             queryClient.invalidateQueries(['notices'])
-            console.log('success')
+            
+            console.log('Notices invalidated')
         },
         onError: (error) => {
             // Manage errors
@@ -94,19 +95,25 @@ export default function CreateNoticeForm() {
 
         let b64_image = ''
 
-        try {
-            b64_image = await fileToBase64(selectedImage)
-        } catch (err) {
-            console.log('error converting image')
+        if (selectedImage) {
+            try {
+                b64_image = await fileToBase64(selectedImage)
+            } catch (err) {
+                console.log('Error converting image')
+            }
         }
 
         // Data to be sent to server
-        // Add image as base64 string + add building and author ids
+        // Add building and author ids
         data = {
             ...data, // form data from react-hook-form
-            image: `data:image/jpeg;base64,${b64_image}`,
             building: user.building._id,
             author: user._id,
+        }
+
+        // Add image key value pair if b64_image exists
+        if (b64_image) {
+            data.image = `data:image/jpeg;base64,${b64_image}`
         }
 
         // Send post request

@@ -43,18 +43,18 @@ export default function HomePage() {
                     {buildingQuery.data?.imageUrl && <img src={buildingQuery.data.imageUrl} alt="building image" className='w-full h-full object-cover' />}
 
                     <div className='p-10'>
-                        <h1 className='text-3xl'>{buildingQuery.data.name}</h1>
-                        <h1 className='text-lg'>{buildingQuery.data.address}</h1>
+                        <h1 className='text-3xl'>{buildingQuery?.data?.name}</h1>
+                        <h1 className='text-lg'>{buildingQuery?.data?.address}</h1>
                     </div>
                 </div>
 
                 <div className='bg-base-200 cursor-pointer' onClick={() => navigate('/building')}>
 
-                    <h1>Building Conctacts</h1>
+                    <h1>Building Contacts</h1>
 
                     {/* <pre>{JSON.stringify(contactsQuery.data, null, 2)}</pre> */}
 
-                    {contactsQuery && contactsQuery?.data.map((contact, index) => {
+                    {contactsQuery && contactsQuery?.data?.map((contact, index) => {
                         if (index > 1) {
                             return
                         }
