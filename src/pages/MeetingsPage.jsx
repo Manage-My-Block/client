@@ -1,18 +1,31 @@
 import MeetingList from '../components/Meetings/MeetingList'
 
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 
-import { getMeetings } from '../api/meetings'
+import { deleteMeeting, getMeetings } from '../api/meetings'
 import MeetingModalCreate from '../components/Meetings/MeetingModalCreate'
-import { useState } from 'react'
 import LoadingIcon from '../components/LoadingIcon'
 
 export default function MeetingsPage() {
+
+    const queryClient = useQueryClient()
+
     const meetingsQuery = useQuery({
         queryKey: ['meetings'],
         queryFn: getMeetings,
         placeholderData: [],
     })
+
+    const handleDelete = useMutation({
+        mutationFn: deleteMeeting,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['meetings'])
+        },
+        onError: (err) => {
+            console.log(`Meeting delete error: ${err}`)
+        }
+    })
+
 
     if (meetingsQuery.isLoading) return <LoadingIcon />
     if (meetingsQuery.isError) return <h1>Error: {meetingsQuery.error.message}</h1>
@@ -34,7 +47,7 @@ export default function MeetingsPage() {
             <MeetingModalCreate />
 
             <div className='mt-8'>
-                <MeetingList meetings={meetingsQuery.data} />
+                <MeetingList meetings={meetingsQuery.data} handleDelete={handleDelete}/>
             </div>
 
             {/* <pre>{JSON.stringify(meetingsQuery.data, null, 2)}</pre> */}
