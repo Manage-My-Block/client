@@ -1,20 +1,27 @@
 /* eslint-disable react/prop-types */
 import { voteOnTodo, commentTodo, callVoteTodo, updateTodo } from "../../api/todos";
-import { convertToNaturalLanguage, convertDateInput, shortenText } from "../../utils/helperFunctions"
+import { convertToNaturalLanguage, convertDateInput, shortenText, cleanDateString } from "../../utils/helperFunctions"
 import { useAuthUser } from 'react-auth-kit';
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useForm } from 'react-hook-form'
 import { useState } from "react";
 import { Draggable } from 'react-beautiful-dnd';
 import Collapsible from 'react-collapsible';
+import SubmitButton from "../SubmitButton";
 
 // eslint-disable-next-line react/prop-types
 export default function TaskItem({ todo, handleDelete, getItemStyle, index, handleUpdateTodo }) {
+    // Get authorised user info
     const authUser = useAuthUser()
     const user_ID = authUser()?.user?._id
 
+    // Access React Query client
     const queryClient = useQueryClient()
+
+    // Manage edit button
     const [editing, setEditing] = useState(false)
+
+    // Manage collapsable
     const [open, setOpen] = useState(false)
 
     // Form management
@@ -67,6 +74,11 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
     // Function to handle the vote buttons
     const handleVote = (vote) => {
+        // Prevent user clicking multiple times while data is being sent
+        if (handleVoteCast.isLoading) {
+            return
+        }
+
         const voteData = {
             vote: {
                 ballot: vote,
@@ -81,6 +93,10 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
     // Submit function for comment text field
     const onSubmit = async (data, event) => {
+        // Prevent user clicking multiple times while data is being sent
+        if (handleCommentPost.isLoading) {
+            return
+        }
 
         // Check if cancel button was clicked
         if (event.nativeEvent.submitter.name === 'cancelButton') {
@@ -195,11 +211,6 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                             </div>
                                         </div>
 
-                                        {/* <div>
-                                            <h1 className="font-bold text-lg">Status</h1>
-                                            <p className={todo.status === 'pending' ? "text-amber-500 pl-4" : "text-green-400 pl-4"}>{todo.status}</p>
-                                        </div> */}
-
                                         <div>
                                             <h1 className="font-bold text-lg">Due</h1>
                                             <p className="pl-4">{todo.dueDate ? convertToNaturalLanguage(todo.dueDate) : "No date"}</p>
@@ -213,11 +224,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                         <div className="flex min-w-max justify-center gap-3">
                                             {/* Call vote button */}
                                             {!todo.needsVote &&
-                                                <button
-                                                    className='btn btn-outline btn-neutral btn-sm self-center'
-                                                    onClick={() => handleCallVote.mutate(todo._id)}>
-                                                    Call vote
-                                                </button>
+                                                <SubmitButton onClick={() => handleCallVote.mutate(todo._id)} label={'Call Vote'} loadingState={handleCallVote.isLoading} classString={'btn btn-outline btn-neutral btn-sm self-center w-24'} />
                                             }
 
                                             {/* Edit button */}
@@ -228,18 +235,10 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                             </button>
 
                                             {/* Complete button */}
-                                            <button
-                                                className='btn btn-outline btn-accent btn-sm self-center'
-                                                onClick={() => handleUpdateTodo.mutate({ todoId: todo._id, updatedData: { isComplete: !todo.isComplete } })}>
-                                                Complete
-                                            </button>
+                                            <SubmitButton onClick={() => handleUpdateTodo.mutate({ todoId: todo._id, updatedData: { isComplete: !todo.isComplete } })} label={'Complete'} loadingState={handleUpdateTodo.isLoading} classString={'btn btn-outline btn-accent btn-sm self-center w-24'} />
 
                                             {/* Delete button */}
-                                            <button
-                                                className='btn btn-outline btn-error btn-sm self-center'
-                                                onClick={() => handleDelete.mutate(todo._id)}>
-                                                Delete
-                                            </button>
+                                            <SubmitButton onClick={() => handleDelete.mutate(todo._id)} label={'Delete'} loadingState={handleDelete.isLoading} classString={'btn btn-outline btn-error btn-sm self-center w-20'} />
                                         </div>
                                     </div>
                                 }
@@ -298,27 +297,11 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                         type="date"
                                                         className="bg-base-200 px-4 py-3 rounded-md text-label border-none cursor-pointer"
                                                     />
-
-                                                    {/* <input
-                                                        {...formRegister('dueDate', {
-                                                            validate: value => {
-                                                                if (!value) {
-                                                                    return true
-                                                                }
-                                                                // Check if date is in the past
-                                                                const selectedDate = new Date(value);
-                                                                const today = new Date();
-                                                                return selectedDate >= today || 'Due date must be a future date';
-                                                            }
-                                                        })}
-                                                        type="date"
-                                                        className="bg-base-100"
-                                                    /> */}
                                                 </div>
                                             </div>
 
                                             <div className="flex gap-2 p-4">
-                                                <button className='btn btn-primary' type='submit' name="updateButton">update</button>
+                                                <SubmitButton onClick={() => handleSubmit(onSubmit)} label={'update'} loadingState={handleUpdateTodo.isLoading} classString={'btn btn-primary'} />
                                                 <button className='btn btn-neutral' type="submit" name="cancelButton">cancel</button>
                                             </div>
                                         </form>
@@ -359,7 +342,8 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                 className='input input-bordered input-sm w-full'
                                                 placeholder='Have your say...'
                                             />
-                                            <button className='btn btn-outline btn-neutral btn-sm' type='submit' name="commentSend">send</button>
+
+                                            <SubmitButton onClick={() => handleSubmit(onSubmit)} label={'send'} loadingState={handleCommentPost.isLoading} classString={'btn btn-outline btn-neutral btn-sm w-14'} />
                                         </form>
                                     </div>
                                 </div>
@@ -381,28 +365,29 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                     <div className="collapse-content">
                                         {/* Buttons to cast vote */}
                                         <div className="flex gap-4">
-                                            <button className='btn btn-outline btn-success btn-sm' onClick={() => handleVote(true)}>Vote yes ({todo.votes.reduce((count, vote) => {
-                                                if (vote.ballot === true) {
-                                                    count += 1
-                                                }
-                                                return count
-                                            }, 0)})</button>
-                                            <button className='btn btn-outline btn-error btn-sm' onClick={() => handleVote(false)}>Vote no ({todo.votes.reduce((count, vote) => {
-                                                if (vote.ballot === false) {
-                                                    count += 1
-                                                }
-                                                return count
-                                            }, 0)})</button>
+                                            <SubmitButton onClick={() => handleVote(true)} label={'Vote yes (' +
+                                                todo.votes.reduce((count, vote) => {
+                                                    if (vote.ballot === true) {
+                                                        count += 1
+                                                    }
+                                                    return count
+                                                }, 0) + ')'} loadingState={handleVoteCast.isLoading} classString={'btn btn-outline btn-success btn-sm w-[100px]'} />
+
+                                            <SubmitButton onClick={() => handleVote(false)} label={'Vote no (' +
+                                                todo.votes.reduce((count, vote) => {
+                                                    if (vote.ballot === false) {
+                                                        count += 1
+                                                    }
+                                                    return count
+                                                }, 0) + ')'} loadingState={handleVoteCast.isLoading} classString={'btn btn-outline btn-error btn-sm w-[100px]'} />
 
                                             <p className="text-lg font-bold self-center">Total votes: {todo.votes.length}</p>
                                         </div>
                                     </div>
                                 </div>
                             )}
-
                         </div>
                     </Collapsible>
-
                 </div>
             )}
         </Draggable>

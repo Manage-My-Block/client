@@ -28,13 +28,17 @@ export default function NoticeItem({ notice, handleDelete }) {
                             <div>
                                 posted {convertDateString(notice.createdAt)}
                             </div>
+
                             {/* Delete Button */}
-                            <button
-                                className='mt-2 btn btn-outline btn-error btn-sm self-center normal-case'
-                                onClick={() => handleDelete.mutate(notice._id)}
-                            >
-                                Delete Notice
-                            </button>
+                            {handleDelete.isLoading ?
+                                <button type='submit' className='mt-2 btn btn-outline btn-error btn-sm self-center normal-case w-28'>
+                                    <div className="flex items-center">
+                                        <span className="loading loading-dots loading-sm m-auto"></span>
+                                    </div>
+                                </button>
+                                :
+                                <button onClick={() => handleDelete.mutate(notice._id)} className='mt-2 btn btn-outline btn-error btn-sm self-center normal-case w-28'>Delete Notice</button>
+                            }
                         </div>
                     </div>
                     {/* Message */}
@@ -69,8 +73,6 @@ export default function NoticeItem({ notice, handleDelete }) {
                     </div>
                 </details>
             </div>
-
-            {/* Delete button */}
         </div>
     )
 }

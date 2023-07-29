@@ -6,6 +6,7 @@ import LoadingIcon from "../components/LoadingIcon"
 import { useEffect, useState } from "react"
 import { shortenText } from "../utils/helperFunctions"
 import ModalDaisy from "../components/ModalDaisy"
+import SubmitButton from "../components/SubmitButton"
 
 export default function TaskBoardPage() {
     const [open, setOpen] = useState()
@@ -109,11 +110,13 @@ export default function TaskBoardPage() {
                                                 }, 0)}</p>
                                             </div>}
 
-                                            <button
-                                                className='btn btn-outline btn-neutral btn-sm ml-auto'
-                                                onClick={() => handleUpdateTodo.mutate({ todoId: task._id, updatedData: { isComplete: false, status: "active" } })}>
-                                                Reopen
-                                            </button>
+                                            <div className="ml-auto">
+                                                <SubmitButton
+                                                    onClick={() => handleUpdateTodo.mutate({ todoId: task._id, updatedData: { isComplete: false, status: "active" } })}
+                                                    label={'reopen'}
+                                                    loadingState={handleUpdateTodo.isLoading}
+                                                    classString={'btn btn-outline btn-neutral btn-sm w-20'} />
+                                            </div>
                                         </div>
                                     </div>
                                 })}
