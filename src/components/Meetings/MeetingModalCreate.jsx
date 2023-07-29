@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createMeeting } from '../../api/meetings'
+import { convertDateInput } from '../../utils/helperFunctions'
 
 export default function MeetingModalCreate() {
     const {
@@ -15,7 +16,7 @@ export default function MeetingModalCreate() {
 
     const createMeetingMutation = useMutation({
         mutationFn: createMeeting,
-        onSuccess: () => {  
+        onSuccess: () => {
             queryClient.invalidateQueries(['meetings'])
         },
         onError: (error) => {
@@ -78,10 +79,19 @@ export default function MeetingModalCreate() {
                         <span className='label label-text'>Meeting Date</span>
                         <input
                             {...register('meetingDate', {
-                                required: 'Meeting date required',
+                                validate: value => {
+                                    if (!value) {
+                                        return true
+                                    }
+                                    // Check if date is in the past
+                                    const selectedDate = new Date(value);
+                                    const today = new Date();
+                                    return selectedDate >= today || 'Due date must be a future date';
+                                }
                             })}
-                            type='date'
-                            className='bg-base-100'
+                            min={convertDateInput(new Date())}
+                            type="date"
+                            className="bg-base-200 px-4 py-3 rounded-md text-label border-none cursor-pointer"
                         />
                     </div>
 

@@ -5,6 +5,7 @@ import { getBudgets } from '../../api/budget'
 import { useEffect, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { convertDateInput } from '../../utils/helperFunctions'
+import SubmitButton from '../SubmitButton'
 
 
 // eslint-disable-next-line react/prop-types
@@ -17,11 +18,12 @@ export default function TaskForm() {
 
     // Form management
     const {
-        register: formRegister,
+        register,
         handleSubmit,
         setError,
         formState: { errors },
         reset,
+        clearErrors
     } = useForm()
 
     // Get budgets list
@@ -70,12 +72,12 @@ export default function TaskForm() {
     // Form submission
     const onSubmit = async (data) => {
         // Add user and building IDs to data
-
         const cleanedData = {
             building: user.building._id,
             author: user._id
         }
 
+        // Add submitted data to cleaned data object
         Object.keys(data).forEach(key => {
             if (data[key]) {
                 cleanedData[key] = data[key]
@@ -83,18 +85,25 @@ export default function TaskForm() {
         })
 
         handleCreate.mutate(cleanedData)
+
+        reset()
     }
+
+    // Reset errors when the form changes
+    const handleFormChange = () => {
+        reset({ errors: {} });
+    };
 
     return (
 
-        <form onSubmit={handleSubmit(onSubmit)} className='modal-box rounded-lg space-y-3 max-w-md'>
+        <form onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange} className='modal-box rounded-lg space-y-3 max-w-md'>
             <div>
                 <h1 className='my-4 font-bold text-lg'>Start a new task!</h1>
             </div>
 
             <div>
                 <input
-                    {...formRegister('title', { required: 'Title is required' })}
+                    {...register('title', { required: 'Title is required' })}
                     defaultValue=''
                     type='text'
                     className='input input-bordered w-full'
@@ -105,7 +114,7 @@ export default function TaskForm() {
 
             <div>
                 <input
-                    {...formRegister('description', { required: 'Description required' })}
+                    {...register('description', { required: 'Description required' })}
                     defaultValue=''
                     type='text'
                     className='input input-bordered w-full'
@@ -116,7 +125,7 @@ export default function TaskForm() {
 
             <div>
                 <select
-                    {...formRegister('status')}
+                    {...register('status')}
                     defaultValue=''
                     className='input input-bordered w-full text-slate-400 cursor-pointer'
                     placeholder=''
@@ -132,7 +141,7 @@ export default function TaskForm() {
                 <div>
                     <span className="label label-text">Due date</span>
                     <input
-                        {...formRegister('dueDate', {
+                        {...register('dueDate', {
                             validate: value => {
                                 if (!value) {
                                     return true
@@ -154,7 +163,7 @@ export default function TaskForm() {
 
                 <label className="relative inline-flex items-center cursor-pointer">
                     <input
-                        {...formRegister('needsVote')}
+                        {...register('needsVote')}
                         type="checkbox"
                         className="sr-only peer"
                     />
@@ -169,7 +178,7 @@ export default function TaskForm() {
                 {/* If no budgets found, disable cost input */}
                 {data?.length > 0 ?
                     <input
-                        {...formRegister('cost')}
+                        {...register('cost')}
                         defaultValue=''
                         type='text'
                         className='input input-bordered w-full'
@@ -177,7 +186,7 @@ export default function TaskForm() {
                     />
                     :
                     <input
-                        {...formRegister('cost')}
+                        {...register('cost')}
                         defaultValue=''
                         type='text'
                         className='input input-bordered w-full'
@@ -189,7 +198,7 @@ export default function TaskForm() {
 
             <div>
                 <select
-                    {...formRegister('budget')}
+                    {...register('budget')}
                     defaultValue=''
                     className='input input-bordered w-full cursor-pointer text-slate-400'>
 
@@ -211,7 +220,13 @@ export default function TaskForm() {
             })}
 
             <div className='pt-2'>
-                <button className='btn btn-primary w-full' type='submit'>Create task</button>
+                {handleCreate.isLoading ?
+                    <button type='submit' className='btn btn-primary w-full'><div className="flex items-center">
+                        <span className="loading loading-dots loading-sm m-auto"></span>
+                    </div></button>
+                    :
+                    <button type='submit' className='btn btn-primary w-full'>CREATE TASK</button>
+                }
             </div>
 
         </form>

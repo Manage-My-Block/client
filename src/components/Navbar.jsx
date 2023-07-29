@@ -14,6 +14,7 @@ import {
     HiMiniBuildingOffice,
     HiUserPlus,
     HiBuildingOffice2,
+    HiWrenchScrewdriver
 } from 'react-icons/hi2'
 
 import { HiOutlineLogin, HiOutlineLogout } from 'react-icons/hi'
@@ -141,6 +142,16 @@ export default function Navbar({ children }) {
                         >
                             <HiUserGroup size={iconSize} />
                             <span>Members</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to='/contacts'
+                            onClick={closeDrawer}
+                            className='font-normal space-x-1'
+                        >
+                            <HiWrenchScrewdriver size={iconSize} />
+                            <span>Contacts</span>
                         </Link>
                     </li>
                     <li>

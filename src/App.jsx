@@ -10,6 +10,7 @@ import TaskBoardPage from './pages/TaskBoardPage'
 import AuthPage from './pages/AuthPage'
 import ProfilePage from './pages/ProfilePage'
 import BuildingPage from './pages/BuildingPage'
+import ContactPage from './pages/ContactPage'
 import UserDebug from './components/UserDebug'
 
 // Libraries
@@ -86,6 +87,10 @@ export default function App() {
                         <Route
                             path='/building'
                             element={<PrivateRoute Component={BuildingPage} />}
+                        />
+                        <Route
+                            path='/contacts'
+                            element={<PrivateRoute Component={ContactPage} />}
                         />
                         <Route
                             path='/profile'
