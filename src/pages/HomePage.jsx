@@ -48,7 +48,7 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                <div className='bg-base-200 cursor-pointer' onClick={() => navigate('/building')}>
+                <div className='bg-base-200 cursor-pointer' onClick={() => navigate('/contacts')}>
 
                     <h1>Building Contacts</h1>
 
