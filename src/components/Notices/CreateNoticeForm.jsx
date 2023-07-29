@@ -1,20 +1,20 @@
 import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createNotice } from '../../api/notices'
 import { useEffect, useState } from 'react'
 import { useAuthUser } from 'react-auth-kit'
-import LoadingIcon from '../LoadingIcon'
+import SubmitButton from '../SubmitButton'
+
 
 export default function CreateNoticeForm() {
     // Access authorised user data from cookies
     const auth = useAuthUser()
     const user = auth().user
 
-    const [isLoading, setIsLoading] = useState(false)
-
-
+    // Manage image form input
     const [selectedImage, setSelectedImage] = useState(null) // File object
 
+    // Manage form
     const {
         register,
         handleSubmit,
@@ -52,13 +52,10 @@ export default function CreateNoticeForm() {
     }
 
 
-
     const createNoticeMutation = useMutation({
         mutationFn: createNotice,
         onSuccess: () => {
             queryClient.invalidateQueries(['notices'])
-            
-            console.log('Notices invalidated')
         },
         onError: (error) => {
             // Manage errors
@@ -122,6 +119,8 @@ export default function CreateNoticeForm() {
         // Reset form inputs
         reset()
 
+        setSelectedImage(null)
+
         // Close modal (create_notice_modal is the same as the string passed to the modalID prop on <DaisyModal />)
         window.create_notice_modal.close()
     }
@@ -151,16 +150,16 @@ export default function CreateNoticeForm() {
                     {...register('title', {
                         required: 'Title required',
                     })}
-                    defaultValue='Test title'
+                    defaultValue=''
                     type='text'
                     className='input input-bordered w-full'
                     placeholder='Title'
                 />
                 <input
-                    {...register('message', {
+                    {...register('description', {
                         required: 'Message required',
                     })}
-                    defaultValue='Test message'
+                    defaultValue=''
                     type='text'
                     className='input input-bordered w-full'
                     placeholder='Message'
