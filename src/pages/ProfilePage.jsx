@@ -95,7 +95,7 @@ export default function ProfilePage() {
 
     return (
         <div className='w-full h-screen flex justify-center'>
-            <div className='w-fit m-auto'>
+            <div className='w-2/5 m-auto'>
                 <h1 className='my-4 font-bold text-2xl'>Update Profile</h1>
                 <form onSubmit={handleSubmit(onSubmit)} onChange={handleFormChange}>
                     <div>
@@ -109,7 +109,7 @@ export default function ProfilePage() {
                                 defaultValue={userQuery.data.email}
                                 type='email'
                                 required
-                                className='input input-bordered'
+                                className='input input-bordered w-full'
                                 placeholder={userQuery.data.email}
                             />
                         </div>
@@ -123,7 +123,7 @@ export default function ProfilePage() {
                                 {...formRegister('password', { required: false, minLength: 6 })}
                                 defaultValue=""
                                 type='text'
-                                className='input input-bordered'
+                                className='input input-bordered w-full'
                                 placeholder='6 or more characters'
                             />
                         </div>
@@ -137,7 +137,7 @@ export default function ProfilePage() {
                                 {...formRegister('name')}
                                 defaultValue={userQuery.data.name}
                                 type='text'
-                                className='input input-bordered'
+                                className='input input-bordered w-full'
                                 placeholder={userQuery.data.name}
                             />
                         </div>
@@ -151,7 +151,7 @@ export default function ProfilePage() {
                                 {...formRegister('apartment')}
                                 defaultValue={userQuery.data.apartment}
                                 type='number'
-                                className='input input-bordered'
+                                className='input input-bordered w-full'
                                 placeholder={userQuery.data.apartment}
                             />
                         </div>

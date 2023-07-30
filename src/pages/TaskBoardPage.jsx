@@ -85,7 +85,7 @@ export default function TaskBoardPage() {
                                         </svg>
                                     </div>
                                 </div>
-                                <h1 className="font-bold text-2xl">Completed Tasks</h1>
+                                <h1 className="font-bold text-2xl text-neutral-content">Completed Tasks</h1>
                             </div>
                         </div>
 
