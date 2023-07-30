@@ -63,7 +63,7 @@ export default function SettingsPage() {
                 </label>
                 <ul
                     tabIndex={0}
-                    className='dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-52'
+                    className='dropdown-content p-2 shadow bg-base-100 rounded-box w-52'
                 >
                     <div className='w-[500px] grid grid-cols-4 gap-3 bg-base-200 p-2 rounded'>
                         {themes.map((theme) => (

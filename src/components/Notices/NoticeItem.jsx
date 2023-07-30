@@ -5,7 +5,7 @@ import ModalDaisy from '../ModalDaisy'
 
 export default function NoticeItem({ notice, handleDelete }) {
     return (
-        <div className='border border-neutral p-4 rounded'>
+        <div className='border border-neutral p-4 rounded mb-4'>
             <div className='flex gap-3'>
                 {/* Image */}
                 {notice.image && (

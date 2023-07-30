@@ -19,7 +19,7 @@ export default function MembersPage() {
     if (isError) return <h1>Error: {error.message}</h1>
 
     return (
-        <div className='m-4'>
+        <div className='mx-4 mt-8'>
             <h1 className='text-3xl font-extrabold'>Members</h1>
 
             <div className='mt-8 border border-neutral rounded'>
