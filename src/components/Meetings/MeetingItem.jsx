@@ -6,7 +6,7 @@ export default function MeetingItem({ meeting, handleDelete }) {
     return (
         <div className='border border-neutral rounded grid grid-cols-1 md:grid-cols-3'>
             <div className='py-2 px-3 col-span-2'>
-                <div className='text-xl font-bold text-primary-content'>{meeting.title}</div>
+                <div className='text-xl font-bold text-base-content'>{meeting.title}</div>
                 <div className='text-sm'>{meeting.description}</div>
             </div>
             <div className='py-2 px-3 bg-base-200 space-y-2'>

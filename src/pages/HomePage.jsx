@@ -35,7 +35,7 @@ export default function HomePage() {
     if (usersQuery.isLoading || todosQuery.isLoading || noticesQuery.isLoading || meetingsQuery.isLoading) return <LoadingIcon />
 
     return (
-        <div className='min-h-screen grid md:grid-rows-[30vh_70vh]'>
+        <div className='min-h-screen grid md:grid-rows-[30vh_70vh] text-base-content'>
 
             <div className='grid md:grid-cols-2'>
 

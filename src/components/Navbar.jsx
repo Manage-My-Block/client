@@ -91,7 +91,7 @@ export default function Navbar({ children }) {
             </div>
             <div className='drawer-side'>
                 <label htmlFor='my-drawer-2' className='drawer-overlay'></label>
-                <ul className='menu p-4 w-60 h-full bg-base-200 text-base-content text-lg'>
+                <ul className='menu p-4 w-60 h-full bg-base-300 text-base-content text-lg'>
                     {/* <ul className='menu p-4 w-60 h-full text-lg'> */}
                     {/* Sidebar content here */}
                     <li>
@@ -188,7 +188,7 @@ export default function Navbar({ children }) {
                         </Link>
                     </li>
 
-                    <div className='bg-base-300 rounded-lg mt-auto'>
+                    <div className='bg-base-100 rounded-lg mt-auto'>
                         {isAuthenticated() && (
                             <>
                                 <li>

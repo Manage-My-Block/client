@@ -31,14 +31,14 @@ export default function MeetingsPage() {
     if (meetingsQuery.isError) return <h1>Error: {meetingsQuery.error.message}</h1>
 
     return (
-        <div className='m-4'>
-            <div className='flex justify-between'>
+        <div className='mx-4 mt-6'>
+            <div className='flex items-center'>
                 <h1 className='text-3xl font-extrabold'>Meetings</h1>
 
                 <button
                     // Open modal
                     onClick={() => window.meeting_modal_create.showModal()}
-                    className='btn btn-primary normal-case'
+                    className='btn btn-primary normal-case md:ml-auto ml-4'
                 >
                     Create Meeting
                 </button>

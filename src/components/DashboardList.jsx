@@ -27,7 +27,7 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
                 <tbody className="h-10 overflow-hidden">
                     {data?.map((dataItem, index) => {
                         // only show 2 items
-                        if (index > 1) {
+                        if (index > 3) {
                             return
                         } else {
                             return <tr key={dataItem._id} className='border-b-0 even:bg-base-200'>

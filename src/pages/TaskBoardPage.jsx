@@ -50,14 +50,14 @@ export default function TaskBoardPage() {
     if (isError) return <div className='w-full h-screen flex justify-center'><h1>Error: {error.message}</h1></div>
 
     return (
-        <div className="m-4">
-            <div className='flex justify-between'>
+        <div className="mx-4 mt-6">
+            <div className='flex items-center'>
                 <h1 className='text-3xl font-extrabold'>Task Board</h1>
 
                 <button
                     // Open modal
                     onClick={() => window.create_task_modal.showModal()}
-                    className='btn btn-primary normal-case'
+                    className='btn btn-primary normal-case md:ml-auto ml-4'
                 >
                     Create New Task
                 </button>
