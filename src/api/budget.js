@@ -13,11 +13,47 @@ export async function getBudgets() {
 	}
 }
 
-export async function createBudget({ data }) {
+export async function getBudgetById(budgetId) {
+
+	try {
+		const response = await api.get(`/budgets/${budgetId}`)
+
+		return response.data
+
+	} catch (error) {
+		console.log(error.message)
+	}
+}
+
+export async function getBudgetByBuildingId(buildingId) {
+
+	try {
+		const response = await api.get(`/budgets/building/${buildingId}`)
+
+		return response.data
+
+	} catch (error) {
+		console.log(error.message)
+	}
+}
+
+export async function createBudget(newBudget) {
 
 	try {
 
-		const response = await api.post('/budgets', { data })
+		const response = await api.post('/budgets', newBudget)
+		return response.data
+
+	} catch (error) {
+		console.log(error.message)
+	}
+}
+
+export async function upateBudget(data) {
+
+	try {
+
+		const response = await api.put(`/budgets/${data.budgetId}`, data.updatedBudgetData)
 		return response.data
 
 	} catch (error) {

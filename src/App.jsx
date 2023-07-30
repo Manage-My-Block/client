@@ -11,6 +11,7 @@ import AuthPage from './pages/AuthPage'
 import ProfilePage from './pages/ProfilePage'
 import BuildingPage from './pages/BuildingPage'
 import ContactPage from './pages/ContactPage'
+import BudgetPage from './pages/BudgetPage'
 import UserDebug from './components/UserDebug'
 
 // Libraries
@@ -91,6 +92,10 @@ export default function App() {
                         <Route
                             path='/contacts'
                             element={<PrivateRoute Component={ContactPage} />}
+                        />
+                        <Route
+                            path='/budget'
+                            element={<PrivateRoute Component={BudgetPage} />}
                         />
                         <Route
                             path='/profile'

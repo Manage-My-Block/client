@@ -14,7 +14,8 @@ import {
     HiMiniBuildingOffice,
     HiUserPlus,
     HiBuildingOffice2,
-    HiWrenchScrewdriver
+    HiWrenchScrewdriver,
+    HiCurrencyDollar
 } from 'react-icons/hi2'
 
 import { HiOutlineLogin, HiOutlineLogout } from 'react-icons/hi'
@@ -142,6 +143,16 @@ export default function Navbar({ children }) {
                         >
                             <HiUserGroup size={iconSize} />
                             <span>Members</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to='/budget'
+                            onClick={closeDrawer}
+                            className='font-normal space-x-1'
+                        >
+                            <HiCurrencyDollar size={iconSize} />
+                            <span>Budget</span>
                         </Link>
                     </li>
                     <li>
