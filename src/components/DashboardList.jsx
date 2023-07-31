@@ -37,7 +37,7 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
                                     } else if (property === 'meetingDate' || property === 'createdAt') {
                                         return <td key={index}>{cleanDateString(dataItem[property])}</td>
                                     } else if (property === 'balance') {
-                                        return <td key={index}>Balance: $ {dataItem[property]}</td>
+                                        return <td key={index} className="text-sm font-thin">Balance: $ <span className="text-lg font-bold">{dataItem[property] / 100}</span></td>
                                     } else {
                                         return <td key={index}>{dataItem[property]}</td>
                                     }
