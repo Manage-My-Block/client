@@ -8,9 +8,9 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
     // const camelCasedProperties = propertiesToDisplay.map(propertyName => camelCase(propertyName))
 
     return (
-        <div className="border-2 border-neutral rounded-md overflow-hidden">
+        <div className="border-2 border-neutral rounded-md overflow-hidden group">
 
-            <h2 className='py-2 px-4 text-xl font-bold bg-neutral text-neutral-content'>
+            <h2 className='py-2 px-4 text-xl font-bold bg-neutral text-neutral-content group-hover:bg-info group-hover:text-black'>
                 {title}
             </h2>
 
