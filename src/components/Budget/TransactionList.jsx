@@ -8,7 +8,7 @@ export default function TransactionList({ transactions }) {
                     <th>Date</th>
                     <th>Description</th>
                     <th>Amount</th>
-                    <th>Tally</th>
+                    <th>Balance</th>
                 </tr>
             </thead>
             <tbody>

@@ -2,12 +2,13 @@
 import { voteOnTodo, commentTodo, callVoteTodo, updateTodo } from "../../api/todos";
 import { convertToNaturalLanguage, convertDateInput, shortenText, cleanDateString } from "../../utils/helperFunctions"
 import { useAuthUser } from 'react-auth-kit';
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { useForm } from 'react-hook-form'
 import { useState } from "react";
 import { Draggable } from 'react-beautiful-dnd';
 import Collapsible from 'react-collapsible';
 import SubmitButton from "../SubmitButton";
+import { upateBudget, getBudgetByBuildingId, getBudgets } from '../../api/budget'
 
 // eslint-disable-next-line react/prop-types
 export default function TaskItem({ todo, handleDelete, getItemStyle, index, handleUpdateTodo }) {
@@ -15,8 +16,13 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
     const authUser = useAuthUser()
     const user_ID = authUser()?.user?._id
 
+    const buildingId = authUser()?.user?.building._id
+
     // Access React Query client
     const queryClient = useQueryClient()
+
+    // Get Budget info
+    const budgetQuery = useQuery(['budgets', buildingId], () => getBudgetByBuildingId(buildingId));
 
     // Manage edit button
     const [editing, setEditing] = useState(false)
@@ -26,7 +32,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
     // Form management
     const {
-        register: formRegister,
+        register,
         handleSubmit,
         reset,
     } = useForm()
@@ -69,6 +75,16 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
             console.log(error)
 
             queryClient.invalidateQueries({ queryKey: ['todos'] })
+        },
+    })
+
+    const handleUpdateBudget = useMutation({
+        mutationFn: upateBudget,
+        onSuccess: () => {
+
+            reset()
+
+            queryClient.invalidateQueries({ queryKey: ['budgets'] })
         },
     })
 
@@ -128,7 +144,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
             return
         } else if (data.description !== todo.description ||
-            data.title !== todo.title || data.dueDate !== "") {
+            data.title !== todo.title || data.dueDate !== "" || data.cost !== "" || data.budget !== "") {
 
 
             // Clean up the data so it can be sent to the query
@@ -146,6 +162,12 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
             }
             if (data.title !== todo.title) {
                 updatedTodo.updatedData.title = data.title
+            }
+            if (data.cost !== todo.cost) {
+                updatedTodo.updatedData.cost = data.cost
+            }
+            if (data.budget !== todo.budget) {
+                updatedTodo.updatedData.budget = data.budget
             }
 
             handleUpdateTodo.mutate(updatedTodo)
@@ -211,6 +233,13 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                             </div>
                                         </div>
 
+                                        <div className="flex">
+                                            <div className="">
+                                                <h1 className="font-bold text-lg mb-1">Cost</h1>
+                                                <p className="pl-4">$ {todo.cost / 100}</p>
+                                            </div>
+                                        </div>
+
                                         <div>
                                             <h1 className="font-bold text-lg">Due</h1>
                                             <p className="pl-4">{todo.dueDate ? convertToNaturalLanguage(todo.dueDate) : "No date"}</p>
@@ -235,7 +264,22 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                             </button>
 
                                             {/* Complete button */}
-                                            <SubmitButton onClick={() => handleUpdateTodo.mutate({ todoId: todo._id, updatedData: { isComplete: !todo.isComplete } })} label={'Complete'} loadingState={handleUpdateTodo.isLoading} classString={'btn btn-outline btn-accent btn-sm self-center w-24'} />
+                                            <SubmitButton
+                                                onClick={() => {
+                                                    handleUpdateTodo.mutate({
+                                                        todoId: todo._id,
+                                                        updatedData: { isComplete: !todo.isComplete, status: 'complete' }
+                                                    })
+                                                    if (todo.cost > 0) {
+                                                        handleUpdateBudget.mutate({
+                                                            budgetId: todo.budget,
+                                                            updatedBudgetData: { transaction: { amount: todo.cost / 100, description: todo.description, todo: todo._id } }
+                                                        })
+                                                    }
+                                                }}
+                                                label={'Complete'}
+                                                loadingState={handleUpdateTodo.isLoading}
+                                                classString={'btn btn-outline btn-accent btn-sm self-center w-24'} />
 
                                             {/* Delete button */}
                                             <SubmitButton onClick={() => handleDelete.mutate(todo._id)} label={'Delete'} loadingState={handleDelete.isLoading} classString={'btn btn-outline btn-error btn-sm self-center w-20'} />
@@ -254,7 +298,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                         <span className="label-text">Title</span>
                                                     </label>
                                                     <input
-                                                        {...formRegister('title', { required: 'Title is required' })}
+                                                        {...register('title', { required: 'Title is required' })}
                                                         defaultValue={todo.title}
                                                         type='text'
                                                         required
@@ -268,7 +312,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                         <span className="label-text">Description</span>
                                                     </label>
                                                     <textarea
-                                                        {...formRegister('description', { required: 'Description is required' })}
+                                                        {...register('description', { required: 'Description is required' })}
                                                         defaultValue={todo.description}
                                                         rows="10"
                                                         required
@@ -279,10 +323,55 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
                                                 <div>
                                                     <label className="label">
+                                                        <span className="label-text">Cost</span>
+                                                    </label>
+                                                    {/* If no budgets found, disable cost input */}
+                                                    {budgetQuery.data.length > 0 ?
+                                                        <input
+                                                            {...register('cost')}
+                                                            defaultValue={todo.cost / 100}
+                                                            type='text'
+                                                            className='input input-bordered w-full'
+                                                            placeholder='Cost'
+                                                        />
+                                                        :
+                                                        <input
+                                                            {...register('cost')}
+                                                            defaultValue=''
+                                                            type='text'
+                                                            className='input input-bordered w-full'
+                                                            placeholder='Cost'
+                                                            disabled
+                                                        />
+                                                    }
+                                                </div>
+
+                                                <div>
+                                                    <label className="label">
+                                                        <span className="label-text">Budget</span>
+                                                    </label>
+                                                    <select
+                                                        {...register('budget')}
+                                                        defaultValue={todo.budget}
+                                                        className='input input-bordered w-full cursor-pointer text-slate-400'>
+
+                                                        {/* Update description if no budgets */}
+                                                        <option value='' disabled>{budgetQuery.data?.length > 0 ? "Select budget" : "No budgets"}</option>
+
+
+                                                        {/* List budgets options */}
+                                                        {budgetQuery.data && budgetQuery.data.map(budget => {
+                                                            return (<option key={budget._id} value={budget._id}>{budget.name}</option>)
+                                                        })}
+                                                    </select>
+                                                </div>
+
+                                                <div>
+                                                    <label className="label">
                                                         <span className="label-text">Due date</span>
                                                     </label>
                                                     <input
-                                                        {...formRegister('dueDate', {
+                                                        {...register('dueDate', {
                                                             validate: value => {
                                                                 if (!value) {
                                                                     return true
@@ -336,7 +425,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
                                         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row max-w-md gap-2 mt-2">
                                             <input
-                                                {...formRegister('comment')}
+                                                {...register('comment')}
                                                 defaultValue=''
                                                 type='text'
                                                 className='input input-bordered input-sm w-full'

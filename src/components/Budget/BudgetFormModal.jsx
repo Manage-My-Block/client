@@ -22,7 +22,7 @@ export default function BudgetFormModal() {
 
             setQueryErrors()
 
-            queryClient.invalidateQueries({ queryKey: ['budget'] })
+            queryClient.invalidateQueries({ queryKey: ['budgets'] })
         },
         onError: (error) => {
             setQueryErrors(error.response.data.errors)

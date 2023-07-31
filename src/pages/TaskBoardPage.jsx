@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { shortenText } from "../utils/helperFunctions"
 import ModalDaisy from "../components/ModalDaisy"
 import SubmitButton from "../components/SubmitButton"
+import { removeTransaction } from "../api/budget"
 
 export default function TaskBoardPage() {
     const [open, setOpen] = useState()
@@ -42,6 +43,14 @@ export default function TaskBoardPage() {
             console.log(error)
 
             queryClient.invalidateQueries({ queryKey: ['todos'] })
+        },
+    })
+
+    const handleRemoveTransaction = useMutation({
+        mutationFn: removeTransaction,
+        onSuccess: () => {
+
+            queryClient.invalidateQueries({ queryKey: ['budget'] })
         },
     })
 
@@ -112,7 +121,17 @@ export default function TaskBoardPage() {
 
                                             <div className="ml-auto">
                                                 <SubmitButton
-                                                    onClick={() => handleUpdateTodo.mutate({ todoId: task._id, updatedData: { isComplete: false, status: "active" } })}
+                                                    onClick={() => {
+                                                        // Update todo to active
+                                                        handleUpdateTodo.mutate({ todoId: task._id, updatedData: { isComplete: false, status: "active" } })
+
+                                                        if (task.cost > 0) {
+                                                            // Remove the transaction from the budget
+                                                            handleRemoveTransaction.mutate({ budgetId: task.budget, todoId: task._id })
+                                                        }
+
+                                                    }
+                                                    }
                                                     label={'reopen'}
                                                     loadingState={handleUpdateTodo.isLoading}
                                                     classString={'btn btn-outline btn-neutral btn-sm w-20'} />
