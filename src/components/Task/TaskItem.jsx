@@ -2,18 +2,24 @@
 import { voteOnTodo, commentTodo, callVoteTodo, updateTodo } from "../../api/todos";
 import { convertToNaturalLanguage, convertDateInput, shortenText, cleanDateString } from "../../utils/helperFunctions"
 import { useAuthUser } from 'react-auth-kit';
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query"
 import { useForm } from 'react-hook-form'
 import { useState } from "react";
 import { Draggable } from 'react-beautiful-dnd';
 import Collapsible from 'react-collapsible';
 import SubmitButton from "../SubmitButton";
+import { upateBudget, getBudgetByBuildingId } from '../../api/budget'
 
 // eslint-disable-next-line react/prop-types
 export default function TaskItem({ todo, handleDelete, getItemStyle, index, handleUpdateTodo }) {
     // Get authorised user info
     const authUser = useAuthUser()
     const user_ID = authUser()?.user?._id
+
+    const buildingId = authUser()?.user?.building._id
+
+    // Get Budget info
+    const budgetQuery = useQuery(['budget', buildingId], () => getBudgetByBuildingId(buildingId));
 
     // Access React Query client
     const queryClient = useQueryClient()
@@ -26,7 +32,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
     // Form management
     const {
-        register: formRegister,
+        register,
         handleSubmit,
         reset,
     } = useForm()
@@ -69,6 +75,16 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
             console.log(error)
 
             queryClient.invalidateQueries({ queryKey: ['todos'] })
+        },
+    })
+
+    const handleUpdateBudget = useMutation({
+        mutationFn: upateBudget,
+        onSuccess: () => {
+
+            reset()
+
+            queryClient.invalidateQueries({ queryKey: ['budget'] })
         },
     })
 
@@ -128,7 +144,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
             return
         } else if (data.description !== todo.description ||
-            data.title !== todo.title || data.dueDate !== "") {
+            data.title !== todo.title || data.dueDate !== "" || data.cost !== "") {
 
 
             // Clean up the data so it can be sent to the query
@@ -146,6 +162,9 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
             }
             if (data.title !== todo.title) {
                 updatedTodo.updatedData.title = data.title
+            }
+            if (data.cost !== todo.cost) {
+                updatedTodo.updatedData.cost = data.cost
             }
 
             handleUpdateTodo.mutate(updatedTodo)
@@ -211,6 +230,13 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                             </div>
                                         </div>
 
+                                        <div className="flex">
+                                            <div className="">
+                                                <h1 className="font-bold text-lg mb-1">Cost</h1>
+                                                <p className="pl-4">$ {todo.cost / 100}</p>
+                                            </div>
+                                        </div>
+
                                         <div>
                                             <h1 className="font-bold text-lg">Due</h1>
                                             <p className="pl-4">{todo.dueDate ? convertToNaturalLanguage(todo.dueDate) : "No date"}</p>
@@ -235,7 +261,21 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                             </button>
 
                                             {/* Complete button */}
-                                            <SubmitButton onClick={() => handleUpdateTodo.mutate({ todoId: todo._id, updatedData: { isComplete: !todo.isComplete } })} label={'Complete'} loadingState={handleUpdateTodo.isLoading} classString={'btn btn-outline btn-accent btn-sm self-center w-24'} />
+                                            <SubmitButton
+                                                onClick={() => {
+                                                    handleUpdateTodo.mutate({
+                                                        todoId: todo._id,
+                                                        updatedData: { isComplete: !todo.isComplete }
+                                                    })
+
+                                                    handleUpdateBudget.mutate({
+                                                        budgetId: budgetQuery?.data?._id,
+                                                        updatedBudgetData: { transaction: { amount: todo.cost / 100, description: todo.description, todo: todo._id } }
+                                                    })
+                                                }}
+                                                label={'Complete'}
+                                                loadingState={handleUpdateTodo.isLoading}
+                                                classString={'btn btn-outline btn-accent btn-sm self-center w-24'} />
 
                                             {/* Delete button */}
                                             <SubmitButton onClick={() => handleDelete.mutate(todo._id)} label={'Delete'} loadingState={handleDelete.isLoading} classString={'btn btn-outline btn-error btn-sm self-center w-20'} />
@@ -254,7 +294,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                         <span className="label-text">Title</span>
                                                     </label>
                                                     <input
-                                                        {...formRegister('title', { required: 'Title is required' })}
+                                                        {...register('title', { required: 'Title is required' })}
                                                         defaultValue={todo.title}
                                                         type='text'
                                                         required
@@ -268,7 +308,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                         <span className="label-text">Description</span>
                                                     </label>
                                                     <textarea
-                                                        {...formRegister('description', { required: 'Description is required' })}
+                                                        {...register('description', { required: 'Description is required' })}
                                                         defaultValue={todo.description}
                                                         rows="10"
                                                         required
@@ -277,12 +317,31 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                     />
                                                 </div>
 
+                                                <div className='relative'>
+                                                    <label className="label">
+                                                        <span className="label-text">Amount</span>
+                                                    </label>
+                                                    <span className='absolute text-lg top-[46px] left-4'>$</span>
+                                                    <input
+                                                        {...register('cost', {
+                                                            required: 'Cost  required',
+                                                            pattern: {
+                                                                value: /^\d+(\.\d{1,2})?$/,
+                                                                message: 'Cost must be a positive integer or a number with at most two decimals'
+                                                            }
+                                                        })}
+                                                        defaultValue={todo.cost / 100}
+                                                        type='text'
+                                                        className='input input-bordered pl-8 w-full'
+                                                    />
+                                                </div>
+
                                                 <div>
                                                     <label className="label">
                                                         <span className="label-text">Due date</span>
                                                     </label>
                                                     <input
-                                                        {...formRegister('dueDate', {
+                                                        {...register('dueDate', {
                                                             validate: value => {
                                                                 if (!value) {
                                                                     return true
@@ -336,7 +395,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
                                         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row max-w-md gap-2 mt-2">
                                             <input
-                                                {...formRegister('comment')}
+                                                {...register('comment')}
                                                 defaultValue=''
                                                 type='text'
                                                 className='input input-bordered input-sm w-full'
