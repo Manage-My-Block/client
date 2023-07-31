@@ -267,11 +267,12 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                         todoId: todo._id,
                                                         updatedData: { isComplete: !todo.isComplete }
                                                     })
-
-                                                    handleUpdateBudget.mutate({
-                                                        budgetId: budgetQuery?.data?._id,
-                                                        updatedBudgetData: { transaction: { amount: todo.cost / 100, description: todo.description, todo: todo._id } }
-                                                    })
+                                                    if (todo.cost > 0) {
+                                                        handleUpdateBudget.mutate({
+                                                            budgetId: budgetQuery?.data?._id,
+                                                            updatedBudgetData: { transaction: { amount: todo.cost / 100, description: todo.description, todo: todo._id } }
+                                                        })
+                                                    }
                                                 }}
                                                 label={'Complete'}
                                                 loadingState={handleUpdateTodo.isLoading}
