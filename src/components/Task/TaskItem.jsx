@@ -268,7 +268,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                 onClick={() => {
                                                     handleUpdateTodo.mutate({
                                                         todoId: todo._id,
-                                                        updatedData: { isComplete: !todo.isComplete }
+                                                        updatedData: { isComplete: !todo.isComplete, status: 'complete' }
                                                     })
                                                     if (todo.cost > 0) {
                                                         handleUpdateBudget.mutate({
