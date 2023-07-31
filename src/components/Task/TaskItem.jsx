@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Draggable } from 'react-beautiful-dnd';
 import Collapsible from 'react-collapsible';
 import SubmitButton from "../SubmitButton";
-import { upateBudget, getBudgetByBuildingId } from '../../api/budget'
+import { upateBudget, getBudgetByBuildingId, getBudgets } from '../../api/budget'
 
 // eslint-disable-next-line react/prop-types
 export default function TaskItem({ todo, handleDelete, getItemStyle, index, handleUpdateTodo }) {
@@ -18,11 +18,11 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
     const buildingId = authUser()?.user?.building._id
 
-    // Get Budget info
-    const budgetQuery = useQuery(['budget', buildingId], () => getBudgetByBuildingId(buildingId));
-
     // Access React Query client
     const queryClient = useQueryClient()
+
+    // Get Budget info
+    const budgetQuery = useQuery(['budgets', buildingId], () => getBudgetByBuildingId(buildingId));
 
     // Manage edit button
     const [editing, setEditing] = useState(false)
@@ -84,7 +84,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
             reset()
 
-            queryClient.invalidateQueries({ queryKey: ['budget'] })
+            queryClient.invalidateQueries({ queryKey: ['budgets'] })
         },
     })
 
@@ -144,7 +144,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
 
             return
         } else if (data.description !== todo.description ||
-            data.title !== todo.title || data.dueDate !== "" || data.cost !== "") {
+            data.title !== todo.title || data.dueDate !== "" || data.cost !== "" || data.budget !== "") {
 
 
             // Clean up the data so it can be sent to the query
@@ -165,6 +165,9 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
             }
             if (data.cost !== todo.cost) {
                 updatedTodo.updatedData.cost = data.cost
+            }
+            if (data.budget !== todo.budget) {
+                updatedTodo.updatedData.budget = data.budget
             }
 
             handleUpdateTodo.mutate(updatedTodo)
@@ -269,7 +272,7 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                     })
                                                     if (todo.cost > 0) {
                                                         handleUpdateBudget.mutate({
-                                                            budgetId: budgetQuery?.data?._id,
+                                                            budgetId: todo.budget,
                                                             updatedBudgetData: { transaction: { amount: todo.cost / 100, description: todo.description, todo: todo._id } }
                                                         })
                                                     }
@@ -318,23 +321,49 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                                     />
                                                 </div>
 
-                                                <div className='relative'>
+                                                <div>
                                                     <label className="label">
-                                                        <span className="label-text">Amount</span>
+                                                        <span className="label-text">Cost</span>
                                                     </label>
-                                                    <span className='absolute text-lg top-[46px] left-4'>$</span>
-                                                    <input
-                                                        {...register('cost', {
-                                                            required: 'Cost  required',
-                                                            pattern: {
-                                                                value: /^\d+(\.\d{1,2})?$/,
-                                                                message: 'Cost must be a positive integer or a number with at most two decimals'
-                                                            }
+                                                    {/* If no budgets found, disable cost input */}
+                                                    {budgetQuery.data.length > 0 ?
+                                                        <input
+                                                            {...register('cost')}
+                                                            defaultValue={todo.cost / 100}
+                                                            type='text'
+                                                            className='input input-bordered w-full'
+                                                            placeholder='Cost'
+                                                        />
+                                                        :
+                                                        <input
+                                                            {...register('cost')}
+                                                            defaultValue=''
+                                                            type='text'
+                                                            className='input input-bordered w-full'
+                                                            placeholder='Cost'
+                                                            disabled
+                                                        />
+                                                    }
+                                                </div>
+
+                                                <div>
+                                                    <label className="label">
+                                                        <span className="label-text">Budget</span>
+                                                    </label>
+                                                    <select
+                                                        {...register('budget')}
+                                                        defaultValue={todo.budget}
+                                                        className='input input-bordered w-full cursor-pointer text-slate-400'>
+
+                                                        {/* Update description if no budgets */}
+                                                        <option value='' disabled>{budgetQuery.data?.length > 0 ? "Select budget" : "No budgets"}</option>
+
+
+                                                        {/* List budgets options */}
+                                                        {budgetQuery.data && budgetQuery.data.map(budget => {
+                                                            return (<option key={budget._id} value={budget._id}>{budget.name}</option>)
                                                         })}
-                                                        defaultValue={todo.cost / 100}
-                                                        type='text'
-                                                        className='input input-bordered pl-8 w-full'
-                                                    />
+                                                    </select>
                                                 </div>
 
                                                 <div>
