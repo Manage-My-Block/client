@@ -12,16 +12,15 @@ export default function TransactionFormModal({ budgetId }) {
 
     const handleUpdateBudget = useMutation({
         mutationFn: upateBudget,
-        onSuccess: (data) => {
-            // console.log(data)
+        onSuccess: () => {
 
-            window.create_transaction_modal.close()
+            window[`create_transaction_modal_${budgetId}`].close()
 
             reset()
 
             setQueryErrors()
 
-            queryClient.invalidateQueries({ queryKey: ['budget'] })
+            queryClient.invalidateQueries({ queryKey: ['budgets'] })
         },
         onError: (error) => {
             setQueryErrors(error.response.data.errors)
