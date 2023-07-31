@@ -51,7 +51,6 @@ export async function createBudget(newBudget) {
 export async function upateBudget(data) {
 
 	try {
-
 		const response = await api.put(`/budgets/${data.budgetId}`, data.updatedBudgetData)
 		return response.data
 
@@ -65,6 +64,16 @@ export async function removeTransaction(data) {
 	try {
 
 		const response = await api.patch(`/budgets/${data.budgetId}/${data.todoId}`)
+		return response.data
+
+	} catch (error) {
+		console.log(error.message)
+	}
+}
+
+export async function deleteBudget(budgetId) {
+	try {
+		const response = await api.delete(`/budgets/${budgetId}`)
 		return response.data
 
 	} catch (error) {
