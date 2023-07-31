@@ -7,11 +7,19 @@ import { useEffect, useState } from "react"
 import { shortenText } from "../utils/helperFunctions"
 import ModalDaisy from "../components/ModalDaisy"
 import SubmitButton from "../components/SubmitButton"
+import { useAuthUser } from 'react-auth-kit'
+import { removeTransaction, getBudgetByBuildingId } from "../api/budget"
 
 export default function TaskBoardPage() {
     const [open, setOpen] = useState()
     const queryClient = useQueryClient()
     const [completedItems, setCompletedItems] = useState([]);
+
+    const auth = useAuthUser()
+    const buildingId = auth().user.building._id
+
+    // Get Budget info
+    const budgetQuery = useQuery(['budget', buildingId], () => getBudgetByBuildingId(buildingId));
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['todos'],
@@ -42,6 +50,14 @@ export default function TaskBoardPage() {
             console.log(error)
 
             queryClient.invalidateQueries({ queryKey: ['todos'] })
+        },
+    })
+
+    const handleRemoveTransaction = useMutation({
+        mutationFn: removeTransaction,
+        onSuccess: () => {
+
+            queryClient.invalidateQueries({ queryKey: ['budget'] })
         },
     })
 
@@ -112,7 +128,17 @@ export default function TaskBoardPage() {
 
                                             <div className="ml-auto">
                                                 <SubmitButton
-                                                    onClick={() => handleUpdateTodo.mutate({ todoId: task._id, updatedData: { isComplete: false, status: "active" } })}
+                                                    onClick={() => {
+                                                        // Update todo to active
+                                                        handleUpdateTodo.mutate({ todoId: task._id, updatedData: { isComplete: false, status: "active" } })
+
+                                                        if (task.cost > 0) {
+                                                            // Remove the transaction from the budget
+                                                            handleRemoveTransaction.mutate({ budgetId: budgetQuery.data._id, todoId: task._id })
+                                                        }
+
+                                                    }
+                                                    }
                                                     label={'reopen'}
                                                     loadingState={handleUpdateTodo.isLoading}
                                                     classString={'btn btn-outline btn-neutral btn-sm w-20'} />
