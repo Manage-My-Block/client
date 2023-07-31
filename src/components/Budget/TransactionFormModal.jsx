@@ -105,8 +105,8 @@ export default function TransactionFormModal({ budgetId }) {
                         {...register('amount', {
                             required: 'Amount  required',
                             pattern: {
-                                value: /^\d+$/,
-                                message: 'Amount must be a positive integer'
+                                value: /^\d+(\.\d{1,2})?$/,
+                                message: 'Amount must be a positive integer or a number with at most two decimals'
                             }
                         })}
                         defaultValue=""
