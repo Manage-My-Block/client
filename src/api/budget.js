@@ -26,7 +26,6 @@ export async function getBudgetById(budgetId) {
 }
 
 export async function getBudgetByBuildingId(buildingId) {
-
 	try {
 		const response = await api.get(`/budgets/building/${buildingId}`)
 
@@ -54,6 +53,18 @@ export async function upateBudget(data) {
 	try {
 
 		const response = await api.put(`/budgets/${data.budgetId}`, data.updatedBudgetData)
+		return response.data
+
+	} catch (error) {
+		console.log(error.message)
+	}
+}
+
+export async function removeTransaction(data) {
+
+	try {
+
+		const response = await api.patch(`/budgets/${data.budgetId}/${data.todoId}`)
 		return response.data
 
 	} catch (error) {
