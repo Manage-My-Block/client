@@ -4,6 +4,7 @@ import { getTodos } from '../api/todos'
 import { getMeetings } from '../api/meetings'
 import { getNotices } from '../api/notices'
 import { getUsers } from '../api/users'
+import { getBudgetByBuildingId } from '../api/budget'
 
 import DashboardList from '../components/DashboardList'
 import LoadingIcon from '../components/LoadingIcon'
@@ -15,6 +16,12 @@ import { useAuthUser } from 'react-auth-kit'
 import { useNavigate } from 'react-router-dom'
 
 export default function HomePage() {
+    // Get logged in user
+    const auth = useAuthUser()
+    const user = auth().user
+
+    // Get single building data
+    const buildingQuery = useQuery(['building', user.building._id], () => getBuilding(user.building._id))
 
 
     const contactsQuery = useQuery(['contacts'], getContacts)
@@ -22,13 +29,8 @@ export default function HomePage() {
     const noticesQuery = useQuery(['notices'], getNotices)
     const meetingsQuery = useQuery(['meetings'], getMeetings)
     const usersQuery = useQuery(['users'], getUsers)
+    const budgetQuery = useQuery(['budgets', user.building._id], () => getBudgetByBuildingId(user.building._id))
 
-    // Get logged in user
-    const auth = useAuthUser()
-    const user = auth().user
-
-    // Get single building data
-    const buildingQuery = useQuery(['building', user.building._id], () => getBuilding(user.building._id))
 
     const navigate = useNavigate()
 
@@ -98,8 +100,15 @@ export default function HomePage() {
                     </div>
                 </div>
                 <div>
-                    <div onClick={() => navigate('/members')} className='cursor-pointer'>
-                        <DashboardList title={"Members"} data={usersQuery.data} propertiesToDisplay={['name', 'email']} />
+                    <div onClick={() => navigate('/taskboard')} className='cursor-pointer'>
+                        <DashboardList title={"Tasks"} data={todosQuery.data} propertiesToDisplay={['title', 'status']} />
+                    </div>
+                </div>
+                <div>
+                    <div onClick={() => navigate('/budget')} className='cursor-pointer'>
+                        {budgetQuery.data?.length && budgetQuery.data.map(budget => {
+                            return <DashboardList key={budget._id} title={"Budget"} data={[budget]} propertiesToDisplay={['name', 'balance']} />
+                        })}
                     </div>
                 </div>
             </div>
