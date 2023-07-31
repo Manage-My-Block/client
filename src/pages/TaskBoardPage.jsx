@@ -7,19 +7,12 @@ import { useEffect, useState } from "react"
 import { shortenText } from "../utils/helperFunctions"
 import ModalDaisy from "../components/ModalDaisy"
 import SubmitButton from "../components/SubmitButton"
-import { useAuthUser } from 'react-auth-kit'
-import { removeTransaction, getBudgetByBuildingId } from "../api/budget"
+import { removeTransaction } from "../api/budget"
 
 export default function TaskBoardPage() {
     const [open, setOpen] = useState()
     const queryClient = useQueryClient()
     const [completedItems, setCompletedItems] = useState([]);
-
-    const auth = useAuthUser()
-    const buildingId = auth().user.building._id
-
-    // Get Budget info
-    const budgetQuery = useQuery(['budget', buildingId], () => getBudgetByBuildingId(buildingId));
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['todos'],
@@ -134,7 +127,7 @@ export default function TaskBoardPage() {
 
                                                         if (task.cost > 0) {
                                                             // Remove the transaction from the budget
-                                                            handleRemoveTransaction.mutate({ budgetId: budgetQuery.data._id, todoId: task._id })
+                                                            handleRemoveTransaction.mutate({ budgetId: task.budget, todoId: task._id })
                                                         }
 
                                                     }
