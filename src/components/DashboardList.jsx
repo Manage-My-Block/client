@@ -38,6 +38,8 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
                                         return <td key={index}>{cleanDateString(dataItem[property])}</td>
                                     } else if (property === 'balance') {
                                         return <td key={index}>Balance: $ <span className="font-bold">{dataItem[property] / 100}</span></td>
+                                    } else if (property === 'name') {
+                                        return <td key={index}>{dataItem[property] ? shortenText(dataItem[property], 18) : 'Anonymous'}</td>
                                     } else {
                                         return <td key={index}>{(shortenText(dataItem[property], 18))}</td>
                                     }
