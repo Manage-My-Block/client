@@ -228,6 +228,13 @@ export default function TaskItem({ todo, handleDelete, getItemStyle, index, hand
                                     <div className="flex flex-col gap-4 w-full">
                                         <div className="flex">
                                             <div className="">
+                                                <h1 className="font-bold text-lg mb-1">Task</h1>
+                                                <p className="pl-4">{todo.title}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex">
+                                            <div className="">
                                                 <h1 className="font-bold text-lg mb-1">Task description</h1>
                                                 <p className="pl-4">{todo.description}</p>
                                             </div>

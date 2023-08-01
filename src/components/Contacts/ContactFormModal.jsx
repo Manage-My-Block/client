@@ -97,19 +97,6 @@ export default function ContactFormModal() {
                 </div>
                 {errors.contactPhone && <div className='alert alert-error rounded-md'>{errors.contactPhone.message}</div>}
 
-                {/* Email field */}
-                {/* <div>
-                            <label className="label">
-                                <span className="label-text">Contact email</span>
-                            </label>
-                            <input
-                                {...formRegister('contactEmail', { required: 'Email required' })}
-                                defaultValue=""
-                                type='email'
-                                className='input input-bordered w-full'
-                            />
-                        </div> */}
-
                 {/* Occupation field */}
                 <div>
                     <label className="label">
@@ -121,10 +108,10 @@ export default function ContactFormModal() {
                         className='input input-bordered w-full'
                     >
                         <option value='' disabled>Select Occupation</option>
-                        <option value="plumber">Plumber</option>
-                        <option value="electrician">Electrician</option>
-                        <option value="maintenance">Maintenance</option>
-                        <option value="cleaning">Cleaning</option>
+                        <option value="Plumber">Plumber</option>
+                        <option value="Electrician">Electrician</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Cleaning">Cleaning</option>
                     </select>
                 </div>
 

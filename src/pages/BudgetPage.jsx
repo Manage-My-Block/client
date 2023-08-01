@@ -48,29 +48,32 @@ export default function BudgetPage() {
                                     <h1 className='text-secondary font-extrabold'>Balance: {`$${numberWithCommas(budget.balance / 100)}`}</h1>
                                 </div>
 
-                                <button
-                                    // Open modal
-                                    onClick={() => window[`create_transaction_modal_${budget._id}`].showModal()}
-                                    className='btn btn-primary normal-case'
-                                >
-                                    Create New Transaction
-                                </button>
+                                <div className='flex gap-4'>
+                                    <button
+                                        // Open modal
+                                        onClick={() => window[`create_transaction_modal_${budget._id}`].showModal()}
+                                        className='btn btn-primary normal-case'
+                                    >
+                                        Create New Transaction
+                                    </button>
 
-                                <ModalDaisy modalId={`create_transaction_modal_${budget._id}`}>
-                                    <TransactionFormModal budgetId={budget._id} />
-                                </ModalDaisy>
+                                    <ModalDaisy modalId={`create_transaction_modal_${budget._id}`}>
+                                        <TransactionFormModal budgetId={budget._id} />
+                                    </ModalDaisy>
 
-                                <button
-                                    // Open modal
-                                    onClick={() => window[`edit_budget_modal_${budget._id}`].showModal()}
-                                    className='btn btn-primary normal-case'
-                                >
-                                    Edit Budget
-                                </button>
+                                    <button
+                                        // Open modal
+                                        onClick={() => window[`edit_budget_modal_${budget._id}`].showModal()}
+                                        className='btn btn-primary normal-case'
+                                    >
+                                        Edit Budget
+                                    </button>
 
-                                <ModalDaisy modalId={`edit_budget_modal_${budget._id}`}>
-                                    <EditBudgetModal budgetId={budget._id} />
-                                </ModalDaisy>
+                                    <ModalDaisy modalId={`edit_budget_modal_${budget._id}`}>
+                                        <EditBudgetModal budgetId={budget._id} />
+                                    </ModalDaisy>
+                                </div>
+
                             </div>
                             <div>
                                 <div className='mt-8 border border-neutral rounded'>
