@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { getBuilding, updateBuilding } from '../api/buildings'
 import LoadingIcon from '../components/LoadingIcon'
 
+
 export default function BuildingPage() {
     const queryClient = useQueryClient()
     const auth = useAuthUser()
@@ -12,8 +13,29 @@ export default function BuildingPage() {
     const [queryErrors, setQueryErrors] = useState()
     const [isSucceed, setIsSucceed] = useState(false)
 
+    // Manage image form input
+    const [selectedImage, setSelectedImage] = useState(null) // File object
+
     // Get Building info
     const buildingQuery = useQuery(['building', buildingId], () => getBuilding(buildingId));
+
+    // Utility function to convert File object to base64 string
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+
+            reader.onload = () => {
+                const base64String = reader.result.split(',')[1]
+                resolve(base64String)
+            }
+
+            reader.onerror = (error) => {
+                reject(error)
+            }
+
+            reader.readAsDataURL(file)
+        })
+    }
 
     // Show success indicator
     useEffect(() => {
@@ -64,6 +86,22 @@ export default function BuildingPage() {
             delete formData.apartmentCount
         }
 
+        // Convert image file to string
+        let b64_image = ''
+
+        if (selectedImage) {
+            try {
+                b64_image = await fileToBase64(selectedImage)
+            } catch (err) {
+                console.log('Error converting image')
+            }
+        }
+
+        // Add image key value pair if b64_image exists
+        if (b64_image) {
+            formData.imageUrl = `data:image/jpeg;base64,${b64_image}`
+        }
+
         // Remove empty properties from data
         for (const key in formData) {
             if (Object.prototype.hasOwnProperty.call(formData, key)) {
@@ -92,6 +130,15 @@ export default function BuildingPage() {
         // Reset form values
         reset();
 
+    }
+
+    const handleImageSelect = (event) => {
+        // Extract File object
+        const images = event.target.files // returns a FileList object
+        const image = images[0] // returns a File object
+
+        // Set state
+        setSelectedImage(image)
     }
 
     const handleFormChange = () => {
@@ -139,7 +186,7 @@ export default function BuildingPage() {
                                 />
                             </div>
 
-                            {/* Address field */}
+                            {/* Apartment field */}
                             <div>
                                 <label className="label">
                                     <span className="label-text">Number of apartments</span>
@@ -154,6 +201,33 @@ export default function BuildingPage() {
                                     placeholder='Apartment count'
                                 />
                             </div>
+
+                            <div className='pt-4'>
+                                <label
+                                    htmlFor='image-select'
+                                    className='grid place-items-center input input-bordered border-dashed border-2 h-16 cursor-pointer active:text-lg transition-all duration-200 ease-in-out select-none'
+                                >
+                                    <span>Click to replace building image</span>
+                                    <input
+                                        // {...register('image')} // doesn't seem to work with react-hook-form
+                                        accept='image/*'
+                                        type='file'
+                                        id='image-select'
+                                        className='hidden'
+                                        onChange={handleImageSelect}
+                                    />
+                                </label>
+                            </div>
+
+                            {selectedImage && (
+                                <div>
+                                    <img
+                                        src={URL.createObjectURL(selectedImage)}
+                                        alt=''
+                                        className=''
+                                    />
+                                </div>
+                            )}
 
                             {/* Error display */}
                             <div className='mt-4'>
