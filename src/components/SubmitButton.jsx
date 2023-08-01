@@ -6,6 +6,10 @@ export default function SubmitButton({ onClick, label, loadingState, classString
 
 
     const handleClick = () => {
+        if (loadingState || isLoading) {
+            return
+        }
+
         onClick()
         setIsLoading(true)
     }
