@@ -12,6 +12,7 @@ import ProfilePage from './pages/ProfilePage'
 import BuildingPage from './pages/BuildingPage'
 import ContactPage from './pages/ContactPage'
 import BudgetPage from './pages/BudgetPage'
+import FAQPage from './pages/FAQPage'
 import UserDebug from './components/UserDebug'
 
 // Libraries
@@ -60,6 +61,10 @@ export default function App() {
                         <Route
                             path='/newBuilding'
                             element={<AuthPage authType={'create building'} />}
+                        />
+                        <Route
+                            path='/faq'
+                            element={<FAQPage />}
                         />
 
                         {/* Protected Paths */}

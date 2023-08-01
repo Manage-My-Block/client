@@ -15,7 +15,8 @@ import {
     HiUserPlus,
     HiBuildingOffice2,
     HiWrenchScrewdriver,
-    HiCurrencyDollar
+    HiCurrencyDollar,
+    HiQuestionMarkCircle
 } from 'react-icons/hi2'
 
 import { HiOutlineLogin, HiOutlineLogout } from 'react-icons/hi'
@@ -186,6 +187,16 @@ export default function Navbar({ children }) {
                         >
                             <HiUser size={iconSize} />
                             <span>Profile</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link
+                            to='/faq'
+                            onClick={closeDrawer}
+                            className='font-normal space-x-1'
+                        >
+                            <HiQuestionMarkCircle size={iconSize} />
+                            <span>FAQ</span>
                         </Link>
                     </li>
                     <li>
