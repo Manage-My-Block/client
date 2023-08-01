@@ -7,8 +7,9 @@ export async function getNotices() {
 }
 
 // Get single notice by id (non async method just to see the difference)
-export function getNotice(noticeId) {
-	return api.get(`/notices/${noticeId}`).then(res => res.data)
+export async function getNotice(noticeId) {
+	const response = await api.get(`/notices/${noticeId}`)
+	return response.data
 }
 
 // Create notice. A notice is { title, message, imageUrl(optional) }
@@ -18,14 +19,14 @@ export async function createNotice(notice) {
 }
 
 // Update notice
-export async function updateNotice(noticeId, notice) {
-	const response = await api.put(`/notices/${noticeId}`, notice)
+export async function updateNotice(data) {
+	const response = await api.put(`/notices/${data.noticeId}`, data.notice)
 	return response.data
 }
 
 // Update notice with a comment
-export async function addCommentNotice(noticeId, comment) {
-	const response = await api.patch(`/notices/${noticeId}`, comment)
+export async function addCommentNotice(data) {
+	const response = await api.put(`/notices/${data.noticeId}/comment`, data.comment)
 	return response.data
 }
 

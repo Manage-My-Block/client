@@ -130,11 +130,6 @@ export default function CreateNoticeForm() {
         const images = event.target.files // returns a FileList object
         const image = images[0] // returns a File object
 
-        // const imageUrl = URL.createObjectURL(image)
-
-        // console.log(image)
-        // console.log(imageUrl)
-
         // Set state
         setSelectedImage(image)
     }
@@ -168,7 +163,7 @@ export default function CreateNoticeForm() {
                 <div>
                     <label
                         htmlFor='image-select'
-                        className='grid place-items-center input input-bordered border-dashed border-2 h-16'
+                        className='grid place-items-center input input-bordered border-dashed border-2 h-16 cursor-pointer active:text-lg transition-all duration-200 ease-in-out select-none'
                     >
                         <span>Click to select image</span>
                         <input
