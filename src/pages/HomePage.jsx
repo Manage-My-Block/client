@@ -34,16 +34,16 @@ export default function HomePage() {
     if (usersQuery.isLoading || todosQuery.isLoading || noticesQuery.isLoading || meetingsQuery.isLoading) return <LoadingIcon />
 
     return (
-        <div className='min-h-screen grid md:grid-rows-[20vh_80vh] gap-5 text-base-content'>
+        <div className='min-h-screen grid md:grid-rows-[30vh_70vh] gap-5 text-base-content'>
 
             <div className='h-full'>
                 <div className='h-full bg-base-200 overflow-hidden cursor-pointer hover:bg-info hover:text-black' onClick={() => navigate('/building')}>
-                    {buildingQuery.data?.imageUrl && <img src={buildingQuery.data.imageUrl} alt="building image" className='w-full h-full object-cover' />}
-
-                    <div className='p-10'>
+                    <div className='p-10 text-black absolute'>
                         <h1 className='text-3xl'>{buildingQuery?.data?.name}</h1>
                         <h1 className='text-lg'>{buildingQuery?.data?.address}</h1>
                     </div>
+                    {buildingQuery.data?.imageUrl && <img src={buildingQuery.data.imageUrl} alt="building image" className='w-full h-full object-cover' />}
+
                 </div>
             </div>
 

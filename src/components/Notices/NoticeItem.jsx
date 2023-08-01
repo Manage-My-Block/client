@@ -1,9 +1,69 @@
 import CommentList from '../CommentList'
 
-import { convertDateString } from '../../utils/helperFunctions'
-import ModalDaisy from '../ModalDaisy'
+import { convertDateString, convertToNaturalLanguage } from '../../utils/helperFunctions'
+import { useForm } from 'react-hook-form'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { addCommentNotice } from '../../api/notices'
+import { useAuthUser } from 'react-auth-kit'
+import SubmitButton from '../SubmitButton'
 
 export default function NoticeItem({ notice, handleDelete }) {
+    const authUser = useAuthUser()
+    const user_ID = authUser()?.user?._id
+
+    // Access React Query client
+    const queryClient = useQueryClient()
+
+    // Form management
+    const {
+        register,
+        handleSubmit,
+        reset,
+    } = useForm()
+
+
+    // React query comment mutation
+    const handleCommentNotice = useMutation({
+        mutationFn: addCommentNotice,
+        onSuccess: () => {
+
+            queryClient.invalidateQueries({ queryKey: ['notices'] })
+        },
+        onError: (error) => {
+            console.log(error)
+
+            queryClient.invalidateQueries({ queryKey: ['notices'] })
+        },
+    })
+
+    // Submit function for comment text field
+    const onSubmit = async (data, event) => {
+        // If data is empty don't do anything
+        if (data.comment.length < 1) {
+            return
+        }
+
+        // Clean up the data so it can be sent to the query
+        const cleanedData = {
+            comment: {
+                comment: data.comment,
+                user: user_ID
+            },
+            noticeId: notice._id
+        }
+
+        // Make API call with comment data
+        handleCommentNotice.mutate(cleanedData)
+
+        // After sending data, reset the field
+        reset()
+    }
+
+
+
+
+
+
     return (
         <div className='border border-neutral p-4 rounded mb-4'>
             <div className='flex gap-3'>
@@ -49,9 +109,10 @@ export default function NoticeItem({ notice, handleDelete }) {
             </div>
 
             <div className='indicator mt-4 w-[99%]'>
-                <span className='indicator-item badge badge-secondary'>
-                    {notice.comments.length}
-                </span>
+                {notice.comments.length > 0 &&
+                    <span className='indicator-item badge badge-secondary'>
+                        {notice.comments.length}
+                    </span>}
 
                 {/* <div className='collapse bg-base-200 rounded'>
 					<input type='checkbox' />
@@ -69,7 +130,31 @@ export default function NoticeItem({ notice, handleDelete }) {
                         Show Comments
                     </summary>
                     <div className='collapse-content'>
-                        <CommentList comments={notice.comments} />
+                        <div className="flex flex-col gap-4">
+                            {notice?.comments && notice.comments.map((comment) => {
+                                console.log(comment)
+                                return (
+                                    <div key={comment._id} className="chat chat-start">
+                                        <div className="chat-header pb-1">
+                                            {(comment.user.name || comment.user.email) + " "}
+                                            <time className="text-xs opacity-50">{convertToNaturalLanguage(comment.createdAt)}</time>
+                                        </div>
+                                        <div className="chat-bubble">{comment.comment}</div>
+                                    </div>
+                                )
+                            })}
+
+                            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row max-w-md gap-2 mt-2">
+                                <input
+                                    {...register('comment')}
+                                    defaultValue=''
+                                    type='text'
+                                    className='input input-bordered input-sm w-full'
+                                    placeholder='Have your say...'
+                                />
+                                <SubmitButton onClick={() => handleSubmit(onSubmit)} label={'send'} loadingState={handleCommentNotice.isLoading} classString={'btn btn-outline btn-neutral btn-sm w-14'} />
+                            </form>
+                        </div>
                     </div>
                 </details>
             </div>
