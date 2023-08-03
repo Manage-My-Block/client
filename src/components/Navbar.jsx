@@ -16,13 +16,23 @@ import {
     HiBuildingOffice2,
     HiWrenchScrewdriver,
     HiCurrencyDollar,
-    HiQuestionMarkCircle
+    HiQuestionMarkCircle,
 } from 'react-icons/hi2'
 
 import { HiOutlineLogin, HiOutlineLogout } from 'react-icons/hi'
 import { useState } from 'react'
 
 const iconSize = 22
+
+import logo from '../assets/house-logo.png'
+
+import { useAuthUser } from 'react-auth-kit'
+
+import Avatar from 'react-avatar'
+
+import { capitalize } from 'lodash'
+
+import colors from 'tailwindcss/colors'
 
 // eslint-disable-next-line react/prop-types
 export default function Navbar({ children }) {
@@ -36,6 +46,9 @@ export default function Navbar({ children }) {
     const isAuthenticated = useIsAuthenticated()
 
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+    const authUser = useAuthUser()
+    const user = authUser()?.user
 
     function closeDrawer() {
         document.querySelector('#my-drawer-2').click()
@@ -52,7 +65,9 @@ export default function Navbar({ children }) {
             <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
 
             <label
-                className={`btn btn-square btn-lg swap ${isMenuOpen ? 'swap-active' : ''} swap-rotate absolute m-4 right-0 z-10 md:hidden`}
+                className={`btn btn-square btn-lg swap ${
+                    isMenuOpen ? 'swap-active' : ''
+                } swap-rotate absolute m-4 right-0 z-10 md:hidden`}
                 htmlFor='my-drawer-2'
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -77,7 +92,7 @@ export default function Navbar({ children }) {
                 </svg>
             </label>
 
-            <div className='drawer-content'>
+            <div className='drawer-content max-h-screen overflow-y-auto'>
                 {/* Page content here */}
 
                 {/* <label
@@ -93,9 +108,26 @@ export default function Navbar({ children }) {
             </div>
             <div className='drawer-side'>
                 <label htmlFor='my-drawer-2' className='drawer-overlay'></label>
-                <ul className='menu p-4 w-60 h-full bg-base-300 text-base-content text-lg'>
-                    {/* <ul className='menu p-4 w-60 h-full text-lg'> */}
+                    <ul className='menu p-4 h-full text-lg bg-base-300'>
                     {/* Sidebar content here */}
+
+                    <li className=''>
+                        <Link
+                            to='/'
+                            onClick={closeDrawer}
+                            className='flex justify-center'
+                        >
+                            {/* <img src={logo} alt="logo" className='w-20 invert opacity-80' /> */}
+                            {/* <span className='font-logo tracking-widest text-xl bg-base-300 -translate-x-[43px] translate-y-[9px]'> */}
+                            
+                            <span className='font-logo tracking-widest text-2xl'>
+                                StrataSphere
+                            </span>
+                        </Link>
+                    </li>
+
+                    <hr className='my-3 border-base-content/30' />
+
                     <li>
                         <Link
                             to='/'
@@ -210,18 +242,35 @@ export default function Navbar({ children }) {
                         </Link>
                     </li>
 
-                    <div className='bg-base-100 rounded-lg mt-auto'>
+                    <div className='bg-base-100 rounded-lg mt-auto m-1'>
                         {isAuthenticated() && (
                             <>
-                                <li>
-                                    <p
-                                        onClick={handleLogout}
-                                        className='font-normal space-x-1'
-                                    >
-                                        <HiOutlineLogout size={iconSize} />
-                                        <span>Logout</span>
-                                    </p>
-                                </li>
+                                <div className='rounded-lg p-3'>
+                                    <div className='flex items-center p-2 gap-3 text-sm'>
+                                        <Avatar
+                                            name={user.name}
+                                            round
+                                            size='42'
+                                            color='grey'
+                                        />
+
+                                        <div className=''>
+                                            <p>{user.name}</p>
+                                            <p className=' opacity-50'>
+                                                {capitalize(user.role.role)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <li>
+                                        <div
+                                            onClick={handleLogout}
+                                            className='font-normal space-x-1 mt-1 bg-base-200'
+                                        >
+                                            <HiOutlineLogout size={iconSize} />
+                                            <span>Logout</span>
+                                        </div>
+                                    </li>
+                                </div>
                             </>
                         )}
                     </div>

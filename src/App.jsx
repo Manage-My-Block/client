@@ -39,7 +39,7 @@ export default function App() {
         // Load fonts to make them available in index.css (using package 'webfontloader')
         WebFont.load({
             google: {
-                families: ['Source Sans Pro'],
+                families: ['Source Sans Pro', 'Montserrat'],
             },
         })
     }, [])
