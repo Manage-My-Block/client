@@ -39,7 +39,7 @@ export default function HomePage() {
             <div className='h-full'>
                 <div className='relative h-full bg-base-200 overflow-hidden cursor-pointer hover:bg-info hover:text-black' onClick={() => navigate('/building')}>
 
-                    <div className='px-8 py-5 text-base-content abs_top_left rounded bg-base-300/50 backdrop-blur md:top-16 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2'>
+                    <div className='px-8 py-5 text-base-content absolute top-0 left-0 rounded-none rounded-br bg-base-300/50 backdrop-blur md:top-16 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-md'>
                         <h1 className='text-xl md:text-3xl'>{buildingQuery?.data?.name}</h1>
                         <h1 className='text-base md:text-lg'>{buildingQuery?.data?.address}</h1>
                     </div>
