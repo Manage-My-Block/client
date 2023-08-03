@@ -6,3 +6,45 @@
 	/* font-family: 'Inter'; */
 	font-family: 'Source Sans Pro';
 }
+
+.glassmorphism {
+    @apply rounded-xl border border-gray-200 bg-white/20 shadow-[inset_10px_-50px_94px_0_rgb(199,199,199,0.2)] backdrop-blur p-5;
+}
+
+.q-invert {
+	@apply invert hue-rotate-180
+}
+
+.orange_gradient {
+    @apply bg-gradient-to-t from-amber-500 via-orange-600 to-yellow-500 bg-clip-text text-transparent;
+}
+
+.logo_gradient {
+    @apply bg-gradient-to-t from-base-content/0 to-base-content bg-clip-text text-transparent;
+}
+
+.drawer-content::-webkit-scrollbar {
+    @apply w-[6px]
+}
+
+.drawer-content::-webkit-scrollbar-track {
+    @apply bg-transparent
+}
+
+.drawer-content::-webkit-scrollbar-thumb {
+    /* @apply bg-secondary-text/80 rounded */
+    @apply bg-base-content/50 rounded
+}
+
+.abs_top_center {
+	@apply absolute top-0 left-1/2 transform -translate-x-1/2
+}
+
+.abs_center {
+	@apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+}
+
+.abs_top_left {
+	@apply absolute top-0 left-0 rounded-none rounded-br
+}
+
