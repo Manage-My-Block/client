@@ -120,7 +120,7 @@ export default function Navbar({ children }) {
                             {/* <img src={logo} alt="logo" className='w-20 invert opacity-80' /> */}
                             {/* <span className='font-logo tracking-widest text-xl bg-base-300 -translate-x-[43px] translate-y-[9px]'> */}
                             
-                            <span className='font-logo tracking-widest text-2xl'>
+                            <span className='font-logo tracking-widest text-xl'>
                                 StrataSphere
                             </span>
                         </Link>
