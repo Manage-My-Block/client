@@ -103,7 +103,7 @@ export default function NoticeItem({ notice, handleDelete }) {
                     </div>
                     {/* Message */}
                     <div className='mt-2 border-t border-neutral rounded p-2'>
-                        {notice.message}
+                        {notice.description}
                     </div>
                 </div>
             </div>
