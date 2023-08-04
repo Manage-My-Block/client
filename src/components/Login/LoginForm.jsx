@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { login } from '../../api/auth'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSignIn } from 'react-auth-kit'
+import SubmitButton from '../SubmitButton'
 
 export default function LoginForm() {
     // Navigation hook
@@ -115,8 +116,11 @@ export default function LoginForm() {
                 })}
 
             <div className='pt-2'>
-                <button className='btn btn-primary w-full'>LOGIN</button>
+                {/* <button className='btn btn-primary w-full'>LOGIN</button> */}
+                <SubmitButton onClick={() => handleSubmit(onSubmit)} label={'Login'} loadingState={false} classString={'btn btn-primary w-full'} />
             </div>
+
+
 
             <p>
                 {"Don't have an account? "}

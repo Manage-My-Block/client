@@ -25,12 +25,13 @@ export async function register(data) {
 	}
 }
 
-export async function newBuilding({ data }) {
+export async function newBuilding(data) {
 	console.log('Creating new building')
 
 	try {
 
-		const response = await api.post('/newbuilding', { data })
+		const response = await api.post('/buildings', data)
+		console.log(response)
 		return response.data
 
 	} catch (error) {

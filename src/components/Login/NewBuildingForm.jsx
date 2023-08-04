@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { newBuilding } from '../../api/auth'
 import { Link, useNavigate } from "react-router-dom"
 import { useSignIn } from 'react-auth-kit'
+import SubmitButton from '../SubmitButton'
 
 // eslint-disable-next-line react/prop-types
 export default function NewBuildingForm() {
@@ -13,7 +14,7 @@ export default function NewBuildingForm() {
 
     // Form management
     const {
-        register: formRegister,
+        register,
         handleSubmit,
         setError,
         formState: { errors },
@@ -22,6 +23,7 @@ export default function NewBuildingForm() {
 
     // Form submission
     const onSubmit = async (data) => {
+        console.log(data)
         // Clean up data before sending
         const cleanedData = {
             buildingData: {
@@ -76,7 +78,7 @@ export default function NewBuildingForm() {
 
             <div>
                 <input
-                    {...formRegister('buildingName', { required: "Apartment number required" })}
+                    {...register('buildingName', { required: "Apartment number required" })}
                     defaultValue=''
                     type='text'
                     className='input input-bordered w-full'
@@ -86,7 +88,7 @@ export default function NewBuildingForm() {
 
             <div>
                 <input
-                    {...formRegister('address', { required: "Address required" })}
+                    {...register('address', { required: "Address required" })}
                     defaultValue=''
                     type='text'
                     className='input input-bordered w-full'
@@ -96,7 +98,7 @@ export default function NewBuildingForm() {
 
             <div>
                 <input
-                    {...formRegister('apartmentCount', { required: "Apartmen count required" })}
+                    {...register('apartmentCount', { required: "Apartmen count required" })}
                     defaultValue=''
                     type='number'
                     className='input input-bordered w-full'
@@ -110,7 +112,7 @@ export default function NewBuildingForm() {
 
             <div>
                 <input
-                    {...formRegister('email', { required: 'Email required' })}
+                    {...register('email', { required: 'Email required' })}
                     defaultValue=''
                     type='email'
                     className='input input-bordered w-full'
@@ -121,7 +123,7 @@ export default function NewBuildingForm() {
 
             <div>
                 <input
-                    {...formRegister('password', { required: true, minLength: 6 })}
+                    {...register('password', { required: true, minLength: 6 })}
                     defaultValue=''
                     type='password'
                     className='input input-bordered w-full'
@@ -140,7 +142,9 @@ export default function NewBuildingForm() {
             })}
 
             <div className='pt-2'>
-                <button className='btn btn-primary w-full'>MANAGE BUILDING</button>
+                {/* <button className='btn btn-primary w-full'>MANAGE BUILDING</button> */}
+                <SubmitButton onClick={() => handleSubmit(onSubmit)} label={'MANAGE BUILDING'} loadingState={false} classString={'btn btn-primary w-full'} />
+
             </div>
 
             <p>{"Already have an account? "}<Link className="underline" to="/login">Login</Link></p>
