@@ -42,8 +42,6 @@ export default function TaskForm() {
     const handleCreate = useMutation({
         mutationFn: createTodo,
         onSuccess: () => {
-            console.log('create Task')
-
             // Reset form values
             reset()
 
