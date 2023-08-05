@@ -82,6 +82,7 @@ export default function LoginForm() {
                     type='password'
                     className='input input-bordered w-full'
                     placeholder='Password'
+                    autoComplete='current-password'
                 />
             </div>
 
