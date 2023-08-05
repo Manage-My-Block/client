@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuthUser } from 'react-auth-kit'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { createContact, getContacts } from '../../api/contacts'
+import { createContact } from '../../api/contacts'
 
 
 export default function ContactFormModal() {
