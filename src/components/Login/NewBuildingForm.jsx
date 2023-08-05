@@ -23,7 +23,6 @@ export default function NewBuildingForm() {
 
     // Form submission
     const onSubmit = async (data) => {
-        console.log(data)
         // Clean up data before sending
         const cleanedData = {
             buildingData: {

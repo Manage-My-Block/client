@@ -74,8 +74,6 @@ export default function ProfilePage() {
             user: data
         }
 
-        console.log(updatedUser)
-
         // Send updated user data
         handleUpdateUser.mutate(updatedUser)
 

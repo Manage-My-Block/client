@@ -114,17 +114,6 @@ export default function NoticeItem({ notice, handleDelete }) {
                         {notice.comments.length}
                     </span>}
 
-                {/* <div className='collapse bg-base-200 rounded'>
-					<input type='checkbox' />
-					<div className='collapse-title font-medium'>
-						Show comments
-					</div>
-					<div className='collapse-content'>
-						<CommentList comments={notice.comments}/>
-                        <p>hello</p>
-					</div>
-				</div> */}
-
                 <details className='collapse bg-base-200 rounded-md'>
                     <summary className='collapse-title font-medium'>
                         Show Comments
@@ -132,7 +121,6 @@ export default function NoticeItem({ notice, handleDelete }) {
                     <div className='collapse-content'>
                         <div className="flex flex-col gap-4">
                             {notice?.comments && notice.comments.map((comment) => {
-                                console.log(comment)
                                 return (
                                     <div key={comment._id} className="chat chat-start">
                                         <div className="chat-header pb-1">

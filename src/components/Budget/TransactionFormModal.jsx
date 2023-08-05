@@ -40,13 +40,6 @@ export default function TransactionFormModal({ budgetId }) {
         document.querySelector(".modal-backdrop").addEventListener('click', (event) => {
             reset()
         })
-        // let x = document.querySelector("#create_budget_modal-backdrop")
-        // x.addEventListener('click', (event) => {
-        //     // reset()
-        //     console.log("test")
-        // })
-        // console.log(x)
-
     }, [])
 
     // Submit function for comment text field
