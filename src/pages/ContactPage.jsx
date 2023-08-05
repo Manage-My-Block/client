@@ -1,13 +1,18 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import LoadingIcon from '../components/LoadingIcon'
-import { deleteContact, getContacts } from '../api/contacts'
+import { getContacts } from '../api/contacts'
 import ModalDaisy from '../components/ModalDaisy'
 import ContactFormModal from '../components/Contacts/ContactFormModal'
 import ContactList from '../components/Contacts/ContactList'
+import { useAuthUser } from 'react-auth-kit'
 
 export default function ContactPage() {
+    // Get logged in user
+    const auth = useAuthUser()
+    const user = auth().user
+
     // Fetch contacts list
-    const contactsQuery = useQuery(['contacts'], () => getContacts());
+    const contactsQuery = useQuery(['contacts'], () => getContacts(user.building._id));
 
     if (contactsQuery.isLoading) return <LoadingIcon />
     if (contactsQuery.isError) return <div className='w-full h-screen flex justify-center'><h1>Error: {contactsQuery.error.message}</h1></div>

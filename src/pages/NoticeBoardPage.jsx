@@ -3,6 +3,7 @@ import { getNotices, deleteNotice } from "../api/notices"
 
 import NoticeList from "../components/Notices/NoticeList"
 import LoadingIcon from "../components/LoadingIcon"
+import { useAuthUser } from 'react-auth-kit'
 
 import ModalDaisy from "../components/ModalDaisy"
 import CreateNoticeForm from "../components/Notices/CreateNoticeForm"
@@ -10,9 +11,13 @@ import CreateNoticeForm from "../components/Notices/CreateNoticeForm"
 export default function NoticeBoardPage() {
     const queryClient = useQueryClient()
 
+    // Get logged in user
+    const auth = useAuthUser()
+    const user = auth().user
+
     const { data: notices, isLoading, isError, error } = useQuery({
         queryKey: ['notices'],
-        queryFn: getNotices
+        queryFn: () => getNotices(user.building._id)
     })
 
     const handleDelete = useMutation({
@@ -37,7 +42,7 @@ export default function NoticeBoardPage() {
                 Create New Notice
             </button>
         </div>
-            
+
         <ModalDaisy modalId={'create_notice_modal'}>
             <CreateNoticeForm />
         </ModalDaisy>
@@ -48,6 +53,6 @@ export default function NoticeBoardPage() {
 
         {/* <pre>{JSON.stringify(notices, null, 2)}</pre> */}
 
-        
+
     </div>
 }

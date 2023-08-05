@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { getUsers } from '../api/users'
-
+import { useAuthUser } from 'react-auth-kit'
 import MemberList from '../components/Members/MemberList'
 import LoadingIcon from '../components/LoadingIcon'
 
 export default function MembersPage() {
+    const auth = useAuthUser()
+    const user = auth().user
+
     const {
         data: members,
         isLoading,
@@ -12,7 +15,7 @@ export default function MembersPage() {
         error,
     } = useQuery({
         queryKey: ['users'],
-        queryFn: getUsers,
+        queryFn: () => getUsers(user.building._id),
     })
 
     if (isLoading) return <LoadingIcon />

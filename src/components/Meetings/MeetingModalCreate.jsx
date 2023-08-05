@@ -2,8 +2,13 @@ import { useForm } from 'react-hook-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createMeeting } from '../../api/meetings'
 import { convertDateInput } from '../../utils/helperFunctions'
+import { useAuthUser } from 'react-auth-kit'
 
 export default function MeetingModalCreate() {
+    // Get logged in user
+    const auth = useAuthUser()
+    const user = auth().user
+
     const {
         register,
         handleSubmit,
@@ -29,7 +34,7 @@ export default function MeetingModalCreate() {
     })
 
     async function onSubmit(data) {
-        console.log('Meeting data submitted: ', data)
+        data.building = user.building._id
 
         createMeetingMutation.mutate(data)
 

@@ -2,9 +2,6 @@ import api from '../utils/axios'
 
 
 export async function getBuildings() {
-	console.log('Getting buildings')
-	console.log(api.getUri() + '/buildings')
-
 	try {
 		const response = await api.get('/buildings')
 
@@ -39,8 +36,6 @@ export async function updateBuilding(data) {
 
 
 export async function newBuilding({ data }) {
-	console.log('Creating new building')
-
 	try {
 
 		const response = await api.post('/newbuilding', { data })

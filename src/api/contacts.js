@@ -1,11 +1,9 @@
 import api from '../utils/axios'
 
 
-export async function getContacts() {
-	// console.log('Getting contacts')
-
+export async function getContacts(buildingId) {
 	try {
-		const response = await api.get('/contacts')
+		const response = await api.get(`/contacts/building/${buildingId}`)
 
 		return response.data
 
@@ -48,8 +46,6 @@ export async function createContact(data) {
 }
 
 export async function deleteContact(data) {
-	console.log('Deleting a Contact')
-
 	try {
 		const response = await api.delete(`/contacts/${data}`,)
 

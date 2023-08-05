@@ -22,11 +22,11 @@ export default function HomePage() {
 
     // Get all data
     const buildingQuery = useQuery(['building', user.building._id], () => getBuilding(user.building._id))
-    const contactsQuery = useQuery(['contacts'], getContacts)
-    const todosQuery = useQuery(['todos'], getTodos)
-    const noticesQuery = useQuery(['notices'], getNotices)
-    const meetingsQuery = useQuery(['meetings'], getMeetings)
-    const usersQuery = useQuery(['users'], getUsers)
+    const contactsQuery = useQuery(['contacts'], () => getContacts(user.building._id))
+    const todosQuery = useQuery(['todos'], () => getTodos(user.building._id))
+    const noticesQuery = useQuery(['notices'], () => getNotices(user.building._id))
+    const meetingsQuery = useQuery(['meetings'], () => getMeetings(user.building._id))
+    const usersQuery = useQuery(['users'], () => getUsers(user.building._id))
     const budgetQuery = useQuery(['budgets', user.building._id], () => getBudgetByBuildingId(user.building._id))
 
     const navigate = useNavigate()

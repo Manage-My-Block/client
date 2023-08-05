@@ -124,7 +124,7 @@ export default function TransactionFormModal({ budgetId }) {
                 </div>
 
                 <div className="flex gap-2 pt-4">
-                    <button className='btn btn-primary w-full' type='submit' name="createContact">Create budget</button>
+                    <button className='btn btn-primary w-full' type='submit' name="createContact">Create transaction</button>
                 </div>
             </form>
         </div>
