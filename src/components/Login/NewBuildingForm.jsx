@@ -127,6 +127,7 @@ export default function NewBuildingForm() {
                     type='password'
                     className='input input-bordered w-full'
                     placeholder='Password'
+                    autoComplete='new-password'
                 />
             </div>
 

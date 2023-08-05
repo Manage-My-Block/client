@@ -105,8 +105,7 @@ export default function TaskBoardPage() {
                         <div className="collapse-content bg-neutral">
                             <div className="flex flex-col gap-4">
                                 {completedItems && completedItems.map(task => {
-                                    {/* console.log(task) */ }
-                                    return <div key={task._id} className="flex w-full max-w-lg items-center gap-4">
+                                    return <div key={task._id} className="flex w-full max-w-lg items-center gap-4 text-neutral-content">
                                         <div className="w-4 h-4 bg-info rounded-full"></div>
 
                                         <p className="text-lg font-extrabold">{shortenText(task.title)}</p>
@@ -133,12 +132,10 @@ export default function TaskBoardPage() {
                                                             // Remove the transaction from the budget
                                                             handleRemoveTransaction.mutate({ budgetId: task.budget, todoId: task._id })
                                                         }
-
-                                                    }
-                                                    }
+                                                    }}
                                                     label={'reopen'}
                                                     loadingState={handleUpdateTodo.isLoading}
-                                                    classString={'btn btn-outline btn-neutral btn-sm w-20'} />
+                                                    classString={'btn btn-outline btn-info btn-sm w-20'} />
                                             </div>
                                         </div>
                                     </div>

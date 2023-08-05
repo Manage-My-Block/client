@@ -93,6 +93,7 @@ export default function RegisterForm() {
                     type='password'
                     className='input input-bordered w-full'
                     placeholder='Password'
+                    autoComplete='new-password'
                 />
             </div>
 
