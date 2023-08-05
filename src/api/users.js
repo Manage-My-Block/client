@@ -1,8 +1,8 @@
 import api from '../utils/axios'
 
-// Get all users (async method)
-export async function getUsers() {
-	const response = await api.get('/users')
+// Get all users
+export async function getUsers(buildingId) {
+	const response = await api.get(`/users/building/${buildingId}`)
 	return response.data
 }
 

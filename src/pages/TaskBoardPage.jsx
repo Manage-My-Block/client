@@ -8,15 +8,19 @@ import { shortenText } from "../utils/helperFunctions"
 import ModalDaisy from "../components/ModalDaisy"
 import SubmitButton from "../components/SubmitButton"
 import { removeTransaction } from "../api/budget"
+import { useAuthUser } from "react-auth-kit"
 
 export default function TaskBoardPage() {
+    // Get logged in user
+    const auth = useAuthUser()
+    const user = auth().user
     const [open, setOpen] = useState()
     const queryClient = useQueryClient()
     const [completedItems, setCompletedItems] = useState([]);
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['todos'],
-        queryFn: getTodos
+        queryFn: () => getTodos(user.building._id)
     })
 
     // Sort completed items each time there is a fetch request with new data

@@ -1,8 +1,8 @@
 import api from '../utils/axios'
 
 // Get all notices (async method)
-export async function getNotices() {
-	const response = await api.get('/notices')
+export async function getNotices(buildingId) {
+	const response = await api.get(`notices/building/${buildingId}`)
 	return response.data
 }
 

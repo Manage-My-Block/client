@@ -5,14 +5,18 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { deleteMeeting, getMeetings } from '../api/meetings'
 import MeetingModalCreate from '../components/Meetings/MeetingModalCreate'
 import LoadingIcon from '../components/LoadingIcon'
+import { useAuthUser } from 'react-auth-kit'
 
 export default function MeetingsPage() {
+    // Get logged in user
+    const auth = useAuthUser()
+    const user = auth().user
 
     const queryClient = useQueryClient()
 
     const meetingsQuery = useQuery({
         queryKey: ['meetings'],
-        queryFn: getMeetings,
+        queryFn: () => getMeetings(user.building._id),
         placeholderData: [],
     })
 
@@ -47,7 +51,7 @@ export default function MeetingsPage() {
             <MeetingModalCreate />
 
             <div className='mt-8'>
-                <MeetingList meetings={meetingsQuery.data} handleDelete={handleDelete}/>
+                <MeetingList meetings={meetingsQuery.data} handleDelete={handleDelete} />
             </div>
 
             {/* <pre>{JSON.stringify(meetingsQuery.data, null, 2)}</pre> */}

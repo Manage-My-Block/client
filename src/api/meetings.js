@@ -1,10 +1,10 @@
 import api from '../utils/axios'
 
 // Get all meetings (async method)
-export async function getMeetings() {
-	const response = await api.get('/meetings')
+export async function getMeetings(buildingId) {
+	const response = await api.get(`/meetings/building/${buildingId}`)
 	return response.data
-} 
+}
 
 // Get single meeting by id (non async method just to see the difference)
 export function getMeeting(meetingId) {

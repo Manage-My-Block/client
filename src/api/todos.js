@@ -1,8 +1,8 @@
 import api from '../utils/axios'
 
 // Get all todos (async method)
-export async function getTodos() {
-	const response = await api.get('/todos')
+export async function getTodos(buildingId) {
+	const response = await api.get(`/todos/building/${buildingId}`)
 	return response.data
 }
 

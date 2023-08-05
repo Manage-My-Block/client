@@ -145,6 +145,6 @@ export default function NewBuildingForm() {
 
             <p>{"Already have an account? "}<Link className="underline" to="/login">Login</Link></p>
 
-        </form >
+        </form>
     )
 }
