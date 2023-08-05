@@ -9,8 +9,11 @@ export default {
     extend: {
       height: {
         screen: ['100vh', '100dvh'],
-      }
+      },
     },
+    fontFamily: {
+      'logo': ['Montserrat']
+    }
   },
   plugins: [
     require("daisyui"),

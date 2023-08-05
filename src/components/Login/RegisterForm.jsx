@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useQuery } from '@tanstack/react-query'
 import { getBuildings } from '../../api/buildings'
 import { useSignIn } from 'react-auth-kit'
+import SubmitButton from '../SubmitButton'
 
 // eslint-disable-next-line react/prop-types
 export default function RegisterForm() {
@@ -120,7 +121,9 @@ export default function RegisterForm() {
             })}
 
             <div className='pt-2'>
-                <button className='btn btn-primary w-full'>REGISTER</button>
+                {/* <button className='btn btn-primary w-full'>REGISTER</button> */}
+                <SubmitButton onClick={() => handleSubmit(onSubmit)} label={'REGISTER'} loadingState={false} classString={'btn btn-primary w-full'} />
+
             </div>
 
             <p>{"Already have an account? "}<Link className="underline" to="/login">Login</Link></p>
