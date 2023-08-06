@@ -36,7 +36,7 @@ export default function HomePage() {
     return (
         <div className='min-h-screen grid md:grid-rows-[30vh_70vh] gap-5 text-base-content'>
 
-            <div className='h-full '>
+            {/* <div className='h-full '>
                 <div className='relative h-full bg-base-200 overflow-hidden cursor-pointer hover:bg-info hover:text-black' onClick={() => navigate('/building')}>
 
                     <div className='px-8 py-5 text-base-content absolute top-0 left-0 rounded-none rounded-br bg-base-300/50 backdrop-blur md:top-16 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-md hover:scale-105 hover:object-cover transition-all duration-75 ease-in-out'>
@@ -47,7 +47,16 @@ export default function HomePage() {
                     {buildingQuery.data?.imageUrl && <img src={buildingQuery.data.imageUrl} alt="building image" className='w-full h-full object-cover' />}
 
                 </div>
+            </div> */}
+
+            <div className='h-full relative bg-base-200 overflow-hidden cursor-pointer hover:bg-info hover:text-black' onClick={() => navigate('/building')}>
+                {buildingQuery.data?.imageUrl && <img src={buildingQuery.data.imageUrl} alt="building image" className='w-full h-full object-cover' />}
+                <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-8 py-5 text-base-content rounded-none rounded-br bg-base-300/50 backdrop-blur md:rounded-md hover:scale-105 hover:object-cover transition-all duration-75 ease-in-out'>
+                    <h1 className='text-xl md:text-4xl pb-2'>{buildingQuery?.data?.name}</h1>
+                    <h1 className='text-base md:text-xl'>{buildingQuery?.data?.address}</h1>
+                </div>
             </div>
+
 
             <div className='flex flex-wrap p-4 gap-5 justify-center max-w-[1200px] m-auto mt-10'>
                 <div className='w-[350px]'>
