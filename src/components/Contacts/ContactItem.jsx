@@ -19,7 +19,7 @@ export default function ContactItem({ contact }) {
     })
     return (
         <tr>
-            <td className='font-bold text-2xl text-secondary'>{startCase(contact.occupation)}</td>
+            <td>{startCase(contact.occupation)}</td>
             <td>{contact.name}</td>
             <td>{contact.phoneNumber}</td>
             <td className="w-24">

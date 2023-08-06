@@ -49,7 +49,7 @@ export default function HomePage() {
                 </div>
             </div>
 
-            <div className='flex flex-wrap p-4 gap-5 justify-center'>
+            <div className='flex flex-wrap p-4 gap-5 justify-center max-w-[1200px] m-auto mt-10'>
                 <div className='w-[350px]'>
                     <div onClick={() => navigate('/taskboard')} className='cursor-pointer'>
                         <DashboardList title={"Tasks"} data={todosQuery.data.filter(task => task.isComplete === false)} propertiesToDisplay={['title', 'description']} />
