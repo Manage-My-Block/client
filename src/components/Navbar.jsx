@@ -65,9 +65,8 @@ export default function Navbar({ children }) {
             <input id='my-drawer-2' type='checkbox' className='drawer-toggle' />
 
             <label
-                className={`btn btn-square btn-lg swap ${
-                    isMenuOpen ? 'swap-active' : ''
-                } swap-rotate absolute m-4 right-0 z-10 md:hidden`}
+                className={`btn btn-square btn-lg swap ${isMenuOpen ? 'swap-active' : ''
+                    } swap-rotate absolute m-4 right-0 z-10 md:hidden`}
                 htmlFor='my-drawer-2'
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -95,20 +94,11 @@ export default function Navbar({ children }) {
             <div className='drawer-content max-h-screen overflow-y-auto'>
                 {/* Page content here */}
 
-                {/* <label
-                    htmlFor='my-drawer-2'
-                    className='swap btn btn-primary drawer-button rounded-none absolute right-0 z-20 md:hidden'
-                >
-                    <input type="checkbox" />
-                    <span className='swap-on'>Open</span>
-                    <span className='swap-off'>Close</span>
-                </label> */}
-
                 {children}
             </div>
             <div className='drawer-side'>
                 <label htmlFor='my-drawer-2' className='drawer-overlay'></label>
-                    <ul className='menu p-4 h-full text-lg bg-base-300'>
+                <ul className='menu p-4 h-full text-lg bg-base-300'>
                     {/* Sidebar content here */}
 
                     <li className=''>
@@ -119,7 +109,7 @@ export default function Navbar({ children }) {
                         >
                             {/* <img src={logo} alt="logo" className='w-20 invert opacity-80' /> */}
                             {/* <span className='font-logo tracking-widest text-xl bg-base-300 -translate-x-[43px] translate-y-[9px]'> */}
-                            
+
                             <span className='font-logo tracking-widest text-xl'>
                                 StrataSphere
                             </span>
