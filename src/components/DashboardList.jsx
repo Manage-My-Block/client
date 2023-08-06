@@ -1,11 +1,6 @@
-import { startCase, camelCase } from "lodash"
 import { cleanDateString, shortenText } from "../utils/helperFunctions"
-// https://lodash.com/docs/4.17.15#startCase
-// https://lodash.com/docs/4.17.15#camelCase
 
 export default function DashboardList({ title, data, propertiesToDisplay }) {
-
-    // const camelCasedProperties = propertiesToDisplay.map(propertyName => camelCase(propertyName))
 
     return (
         <div className="border-2 border-neutral rounded-md overflow-hidden hover:border-info transition-colors">
@@ -15,14 +10,6 @@ export default function DashboardList({ title, data, propertiesToDisplay }) {
             </h2>
 
             <table className='table table-lg'>
-
-                {/* <thead className='text-lg'>
-                    <tr>
-                        {propertiesToDisplay?.map((property, index) => (
-                            <th key={index}>{startCase(property)}</th>
-                        ))}
-                    </tr>
-                </thead> */}
 
                 <tbody className="h-10 overflow-hidden">
                     {data?.map((dataItem, index) => {
